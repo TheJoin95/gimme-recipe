@@ -62,7 +62,7 @@ switch (args[0].split('=')[1]) {
     case "getDetailOfAllRecipes":
         var now = new Date();
         var criteria = { processDate: { $lte: new Date(now.getFullYear(), (now.getMonth() - 1), now.getDay()) } };
-
+        // var criteria = { processDate: {$exists: false} };
         Recipe.find(
             criteria,
             { url: 1 },
