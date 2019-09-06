@@ -60,16 +60,14 @@ switch (args[0].split('=')[1]) {
         break;
 
     case "getDetailOfAllRecipes":
-        console.log(new Date().setMonth(new Date().getMonth() - 1));
+        var now = new Date();
         Recipe.find(
-            { processDate: { $lte: new Date() } },
+            { processDate: { $lte: new Date(now.getFullYear(), (now.getMonth() - 1), now.getDay()) } },
             { url: 1 },
-            { limit: 20, sort: {processDate: 1} },
-            function (err, recipes) {
+            { limit: 15, sort: {processDate: 1} },
+            async function (err, recipes) {
                 for(let key in recipes) {
-                    setTimeout(function() {
-                        getDetails(recipes[key].url);
-                    }, 2000);
+                    await getDetails(recipes[key].url);
                 }
             }
         );
@@ -81,11 +79,14 @@ switch (args[0].split('=')[1]) {
         break;
 }
 
+const distinct = function(value, index, self) {
+    return self.indexOf(value) === index;
+}
 
-function getDetails (url) {
+var getDetails = async function (url) {
     console.log("Current page ", url);
     
-    const req = https.get(url, (res) => {
+    const req = https.get(url, async (res) => {
         const { statusCode } = res;
         
         console.log("Response status code: ", statusCode);
@@ -95,7 +96,7 @@ function getDetails (url) {
             data += d;
         });
 
-        res.on('end', () => {
+        res.on('end', async () => {
             timeout = (Math.random() * (maxTimeout - minTimeout) + minTimeout);
             var urlRegex = /application\/ld\+json">\s+(.+)\s+/gm;
             var matches = [];
@@ -110,6 +111,19 @@ function getDetails (url) {
             delete details.author;
             delete details.interactionStatistic;
             delete details.aggregateRating['@type'];
+            delete details.nutrition['@type'];
+
+            details.prepTime = (details.prepTime == 'PTM') ? 0: parseInt(details.prepTime.match(/[\d.]+/)[0]);
+            details.totalTime = (details.totalTime == 'PTM') ? 0: parseInt(details.totalTime.match(/[\d.]+/)[0]);
+            details.cookTime = (details.cookTime == 'PTM') ? 0: parseInt(details.cookTime.match(/[\d.]+/)[0]);
+
+            details.ingredients = details.recipeIngredient.map(function(ingredient) {
+                return ingredient.replace(/(q\.b\.|\d+\s+g|\d+$)/g, '').trim().toLowerCase();
+            }).filter(distinct);
+
+            for(let key in details.nutrition) {
+                details.nutrition[key] = parseInt(details.nutrition[key].match(/^[\d.]+/)[0]);
+            }
 
             details.processDate = new Date();
             Recipe.updateOne(
@@ -121,4 +135,6 @@ function getDetails (url) {
             );
         });
     });
+
+    return await new Promise(resolve => setTimeout(resolve, timeout));
 };

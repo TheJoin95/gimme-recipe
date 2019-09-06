@@ -11,15 +11,17 @@ const recipeSchema = new mongoose.Schema({
     recipeCategory: String,
     image: String,
     description: String,
-    prepTime: String,
-    cookTime: String,
-    totalTime: String,
+    prepTime: Number,
+    cookTime: Number,
+    totalTime: Number,
     recipeYield: String,
     recipeIngredient: Array,
     recipeInstructions: Array,
     suitableForDiet: Array,
     nutrition: Object,
-    aggregateRating: Object
+    aggregateRating: Object,
+    ingredients: Array,
+    processDate: Date
 });
 
 var Recipe = mongoose.model('Recipe', recipeSchema);
