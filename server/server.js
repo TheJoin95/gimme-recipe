@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression')
 const recipes = require('./routes/recipes');
 
 const app = express();
