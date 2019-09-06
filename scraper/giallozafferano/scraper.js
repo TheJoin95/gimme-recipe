@@ -8,9 +8,9 @@ if(args.length == 0)
 var nextPageUrl = 'https://www.giallozafferano.it/ricette-cat/';
 var urls = [];
 var duplicated = 0;
-var timeout = 2000;
-var maxTimeout = 3000;
-var minTimeout = 500;
+var timeout = 500;
+var maxTimeout = 2000;
+var minTimeout = 300;
 
 switch (args[0].split('=')[1]) {
     case 'retrieveAll':
@@ -61,10 +61,12 @@ switch (args[0].split('=')[1]) {
 
     case "getDetailOfAllRecipes":
         var now = new Date();
+        var criteria = { processDate: { $lte: new Date(now.getFullYear(), (now.getMonth() - 1), now.getDay()) } };
+
         Recipe.find(
-            { processDate: { $lte: new Date(now.getFullYear(), (now.getMonth() - 1), now.getDay()) } },
+            criteria,
             { url: 1 },
-            { limit: 15, sort: {processDate: 1} },
+            { sort: {processDate: 1} },
             async function (err, recipes) {
                 for(let key in recipes) {
                     await getDetails(recipes[key].url);
@@ -109,20 +111,27 @@ var getDetails = async function (url) {
             delete details['@context'];
             delete details['@type'];
             delete details.author;
-            delete details.interactionStatistic;
-            delete details.aggregateRating['@type'];
-            delete details.nutrition['@type'];
+
+            if(details.interactionStatistic !== undefined)
+                delete details.interactionStatistic;
+
+            if(details.aggregateRating !== undefined)
+                delete details.aggregateRating['@type'];
 
             details.prepTime = (details.prepTime == 'PTM') ? 0: parseInt(details.prepTime.match(/[\d.]+/)[0]);
             details.totalTime = (details.totalTime == 'PTM') ? 0: parseInt(details.totalTime.match(/[\d.]+/)[0]);
             details.cookTime = (details.cookTime == 'PTM') ? 0: parseInt(details.cookTime.match(/[\d.]+/)[0]);
 
             details.ingredients = details.recipeIngredient.map(function(ingredient) {
-                return ingredient.replace(/(q\.b\.|\d+\s+g|\d+$)/g, '').trim().toLowerCase();
+                return ingredient.replace(/(q\.b\.|\d+\s+g|\d+$|kg|rametti|spicchi|\&\w+;$)/g, '').trim().toLowerCase();
             }).filter(distinct);
 
-            for(let key in details.nutrition) {
-                details.nutrition[key] = parseInt(details.nutrition[key].match(/^[\d.]+/)[0]);
+            if(details.nutrition !== undefined) {
+                delete details.nutrition['@type'];
+                for(let key in details.nutrition) {
+                    let matchedNum = details.nutrition[key].match(/^[\d.]+/);
+                    details.nutrition[key] = (matchedNum === null) ? 0 : parseInt(matchedNum[0]);
+                }
             }
 
             details.processDate = new Date();
