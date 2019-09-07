@@ -21,7 +21,9 @@ const recipeSchema = new mongoose.Schema({
     nutrition: Object,
     aggregateRating: Object,
     ingredients: Array,
-    processDate: Date
+    processDate: Date,
+    numIngredients: Number,
+    numStep: Number
 });
 
 var Recipe = mongoose.model('Recipe', recipeSchema);
