@@ -20,8 +20,9 @@ const MENU_RECIPE_CATEGORY = {
     starter: 'Antipasti',
     firstCourse: 'Primi piatti',
     secondCourse: 'Secondi piatti',
-    sideDish: 'Contorni',
-    dessert: 'Dolci'
+    sideDish: { $in: ['Contorni', 'Insalate'] },
+    dessert: 'Dolci',
+    bonus: 'Piatti Unici'
 };
 
 router.get('/gimme-menu', async function(req, res) {
@@ -32,6 +33,13 @@ router.get('/gimme-menu', async function(req, res) {
         sideDish: null,
         dessert: null
     };
+
+    
+    if(req.query.uniqueDish !== undefined) {
+        menu.bonus = null;
+        delete menu.firstCourse;
+        delete menu.secondCourse;
+    }
 
     var menuKeys = Object.keys(menu);
     var criteria = buildAdvancedCriteria({}, req.query);
@@ -49,6 +57,16 @@ router.get('/gimme-menu', async function(req, res) {
 
     for(let index in menuKeys) {
         criteria['recipeCategory'] = MENU_RECIPE_CATEGORY[menuKeys[index]];
+
+        // Questa valutazione è da fare in fase di scraping
+        if(criteria['recipeCategory'] == MENU_RECIPE_CATEGORY.secondCourse && menu.firstCourse !== undefined && menu.firstCourse !== null){
+            criteria['description'] = (menu.firstCourse.description.match(/pesc/) !== null) ? /pesce/i : /carn/i;
+        }else if(criteria['recipeCategory'] == MENU_RECIPE_CATEGORY.firstCourse && menu.secondCourse !== undefined && menu.secondCourse !== null){
+            criteria['description'] = (menu.firstCourse.description.match(/pesc/) !== null) ? /pesce/i : /carn/i;
+        }else if(criteria['description'] !== undefined){
+            delete criteria['description'];
+        }
+
         menu[menuKeys[index]] = await Recipe.aggregate()
             .match(criteria)
             .sample(1)
