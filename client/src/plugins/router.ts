@@ -39,7 +39,7 @@ if (config.multilanguage) {
     return param in route
   }
 
-  Object.keys(languages).forEach((lang) => {
+  Object.keys(languages).forEach((lang: string) => {
     possibleLanguages += lang + '|'
   })
 

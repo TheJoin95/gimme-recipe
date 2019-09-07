@@ -5,43 +5,36 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ChuckNorrisApi from '@/services/ChuckNorrisApi'
+import RecipeApi, { MostRated } from '@/services/RecipeApi'
+
+// console.log(MostRated)
 
 export default Vue.extend({
   name: 'RestAPI',
 
   data () {
     return {
-      selectedCategory: null,
-
-      quotes: {
-        searchResult: [] as Array<string>,
-        categories: [] as Array<string>,
-        loading: false as boolean,
-        random: '' as string
+      recipes: {
+        mostRated: [] as Array<MostRated>,
+        loading: false as boolean
       }
     }
   },
 
-  methods: {
-    getCategoryQuote (category: string) {
-      this.quotes[category] = '' as string
-      ChuckNorrisApi.getCategoryQuote(category)
-    },
-
-    searchQuotes (query: string) {
-      ChuckNorrisApi.search(query)
+  watch: {
+    'recipes.loading' (loading) {
+      if (!loading) {
+        console.log(this.recipes.mostRated)
+      }
     }
   },
 
+  // methods: {
+  // },
+
   created () {
-    ChuckNorrisApi.model = this.quotes
-
-    ChuckNorrisApi.getRandomQuote()
-    ChuckNorrisApi.getCategories()
-
-    this.getCategoryQuote('movie')
-    this.searchQuotes('food')
+    RecipeApi.model = this.recipes
+    RecipeApi.getMostRatedRecipes()
   },
 
   metaInfo () {

@@ -22,8 +22,6 @@ Vue.use(VueCookie)
 Vue.use(Axios, axios)
 Vue.config.productionTip = false
 
-console.log(VueCookie)
-
 router.beforeEach((to, from, next) => {
   Vue.config.language = to.params.language || 'en'
   next()
