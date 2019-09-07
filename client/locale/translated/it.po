@@ -1,0 +1,70 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-05 16:25+0200\n"
+"PO-Revision-Date: 2019-09-05 16:26+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Welcome Message
+#: src/views/Home.vue:6
+msgid "Welcome!"
+msgstr "Benvenuto!"
+
+#~ msgid "Language:"
+#~ msgstr "Lingua:"
+
+#~ msgid "Platform Information"
+#~ msgstr "Informazioni Piattaforma"
+
+#~ msgid "These are some Spritesheet Icons"
+#~ msgstr "Queste sono icone Spritesheet"
+
+#~ msgid "This is an inline SVG Icon"
+#~ msgstr "Questa è una SVG Inline"
+
+#~ msgid "Welcome to the MONOGRID Vue.js Boilerplate"
+#~ msgstr "Benvenuto nel MONOGRID Vue.js Boilerplate"
+
+#~ msgid "MONOGRID"
+#~ msgstr "MONOGRID"
+
+#~ msgid "A Vue.js Boilerplate buit and mantained by MONOGRID"
+#~ msgstr "Un boilerplate Vue.js sviluppato e mantenuto da MONOGRID"
+
+#~ msgid "Built with ♥ by [MONOGRID](http://www.mono-grid.com)"
+#~ msgstr "Con ♥ da [MONOGRID](http://www.mono-grid.com)"
+
+#~ msgid ""
+#~ "Please feel free to\n"
+#~ "\n"
+#~ "- ~~stress [Daniele](mailto:daniele@mono-grid.com)~~\n"
+#~ "- **explore our [Example Service](Service) page**\n"
+#~ "- [Switch Language](Home \"language: 'it'\") to Italian"
+#~ msgstr ""
+#~ "Sentiti libero di \n"
+#~ "\n"
+#~ "- ~~stressare [Daniele](mailto:daniele@mono-grid.com)~~ \n"
+#~ "- **navigare nella [Pagina di esempio](Service) per Servizi**\n"
+#~ "- [Cambiare la lingua](Home \"language: 'en'\") in Inglese"
+
+#~ msgid "Home Page"
+#~ msgstr "Home Page"
+
+#~ msgid "Service Page"
+#~ msgstr "Pagina Servizio"
+
+#~ msgid "A MONOGRID Boilerplate written in Vue.js"
+#~ msgstr "Un MONOGRID boilerplate scritto in Vue.js"

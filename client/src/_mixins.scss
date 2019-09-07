@@ -1,0 +1,21 @@
+@mixin vertical-gradient($color1, $color2, $from: 0%, $to: 100%) {
+  background: linear-gradient(to bottom, $color1 $from, $color2 $to);
+}
+
+@mixin horizontal-gradient($color1, $color2, $from: 0%, $to: 100%) {
+  background: linear-gradient(to right, $color1 $from, $color2 $to);
+}
+
+@mixin desktop-hover {
+  html.no-mobile & {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+@mixin ie-specific {
+  html.ie & {
+    @content;
+  }
+}
