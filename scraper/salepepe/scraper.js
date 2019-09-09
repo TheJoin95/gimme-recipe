@@ -1,11 +1,12 @@
 const Recipe = require('./model/Recipe');
+const Wine = require('./model/Wine');
 const https = require('https');
 
 var args = process.argv.slice(2);
 if(args.length == 0)
     return "Specifiy the \"action\" params";
 
-var nextPageUrl = 'https://www.salepepe.it/masterchef_recipe-sitemap0.xml';
+var nextPageUrlRecipe = 'https://www.salepepe.it/masterchef_recipe-sitemap0.xml';
 var PAGE_NUM = 1;
 var maxPage = 7;
 var urls = [];
@@ -15,14 +16,46 @@ var maxTimeout = 2000;
 var minTimeout = 300;
 
 switch (args[0].split('=')[1]) {
+    case 'getWineDetails':
+        (async function() {
+            const req = https.get('https://www.salepepe.it/salepepe_schedavino-sitemap.xml', async (res) => {
+                const { statusCode } = res;
+                console.log("Response status code: ", statusCode);
+                var data = "";
+                res.on('data', (d) => {
+                    data += d;
+                });
+                res.on('end', async () => {
+                    var urlRegex = /<loc>(.+)<\/loc>/gm;
+                    timeout = (Math.random() * (maxTimeout - minTimeout) + minTimeout);
+                    PAGE_NUM++;
+                    var matches = [];
+                    while (matches = urlRegex.exec(data)) {
+                        urls.push(matches[1]);
+                        var newWine = new Wine({ url: matches[1], author: 'salepepe' });
+                        newWine.save(function (err, wine) {
+                            if (err !== null) {
+                                duplicated++;
+                            }
+                        });
+
+                        await getWineDetails(matches[1]);
+                    }
+                });
+            });
+
+        })();
+
+        break;
+
     case 'retrieveAll':
-        (async function getUrls (nextPageUrl) {
-            nextPageUrl = nextPageUrl.replace(/\d/, PAGE_NUM);
-            console.log("Current page ", nextPageUrl);
+        (async function getUrls (nextPageUrlRecipe) {
+            nextPageUrlRecipe = nextPageUrlRecipe.replace(/\d/, PAGE_NUM);
+            console.log("Current page ", nextPageUrlRecipe);
             
             if(PAGE_NUM > maxPage) return false;
             
-            const req = https.get(nextPageUrl, async (res) => {
+            const req = https.get(nextPageUrlRecipe, async (res) => {
                 const { statusCode } = res;
                 
                 console.log("Response status code: ", statusCode);
@@ -51,12 +84,12 @@ switch (args[0].split('=')[1]) {
                     }
         
                     await new Promise(resolve => setTimeout(resolve, timeout));
-                    return getUrls(nextPageUrl);
+                    return getUrls(nextPageUrlRecipe);
                 });
             });
         
             console.log("Total Found %d\nInfo: Found %d duplicates out of %d total\n", urls.length, duplicated, urls.length);
-        })(nextPageUrl);
+        })(nextPageUrlRecipe);
         break;
 
     case "getDetailOfAllRecipes":
@@ -84,6 +117,70 @@ switch (args[0].split('=')[1]) {
 const distinct = function(value, index, self) {
     return self.indexOf(value) === index;
 }
+
+var getWineDetails = async function (url) {
+    console.log("Current page ", url);
+    
+    const req = https.get(url, async (res) => {
+        const { statusCode } = res;
+        
+        console.log("Response status code: ", statusCode);
+        
+        var data = "";
+        res.on('data', (d) => {
+            data += d;
+        });
+
+        res.on('end', async () => {
+
+            timeout = (Math.random() * (maxTimeout - minTimeout) + minTimeout);
+            var dataRegex = {
+                name: /<h1.+>(.+)<\/h1>$/m,
+                origin: /Origine<\/h3>\s+<p class="lato">(.+)<\/p>$/mi,
+                ingredients: /Uve<\/h3>\s+<p class="lato">(.+)<\/p>$/mi,
+                notes: /Note tecniche<\/h3>\s+<p class="lato">(.+)<\/p>$/mi,
+                alcoholGrad: /Gradazione alcolica<\/h3>\s+<p class="lato">(.+)<\/p>$/mi,
+                additionalNotes: /Come servire<\/h3>\s+<p class="lato">(.+)<\/p>$/mi,
+                foodAbbination: /Abbinamenti<\/h3>\s+<p class="lato">(.+)<\/p>$/mi,
+                production: /Produttore<\/h3>\s+<p class="lato">(.+)<\/p>$/mi,
+                image: /<img.+srcset=".+300w, (.+) 1024w"/mi,
+                description: /<div class="tab-entry-summary lato">\s+(.+\s+.+|.+)<\/p>\s+<\/div><!-- \.entry-summary/m,
+            };
+
+            var details = {};
+            details.author = 'salepepe';
+
+            for (let field in dataRegex) {
+                var matchRegex = data.match(dataRegex[field]);
+                if(matchRegex !== null)
+                    details[field] = matchRegex[1];
+            }
+
+            details.wineCategory = url.match(/(bianchi|rossi|bollicine|dolci)\//)[1];
+
+            if(details.description !== undefined)
+                details.description = details.description.replace(/(<([^>]+)>)/gm, '');
+
+            details.ingredients = details.ingredients.split(',');
+            details.rawIngredients = details.ingredients.map(function(entry) {
+                return entry.replace(/\d+%/, '').trim();
+            }).filter(distinct);
+
+            details.alcoholGrad = parseFloat(details.alcoholGrad.replace(',','.').match(/[\d.]+/)[0]);
+
+            details.processDate = new Date();
+            Wine.updateOne(
+                { url: url },
+                details,
+                function(err, raw) {
+                    if(err !== null) console.log(err);
+                }
+            );
+        });
+    });
+
+    return await new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 var getDetails = async function (url) {
     console.log("Current page ", url);
@@ -158,84 +255,3 @@ var getDetails = async function (url) {
 
     return await new Promise(resolve => setTimeout(resolve, timeout));
 };
-
-
-//..............................
-
-/**
- * @description get the correct sanitized value from html 'tag'
- * @param {Object} tag cheerio HTML node
- * @returns {string} tag microdata value
- */
-function getPropValue(tag) {
-  var value;
-
-  if ($(tag).attr('content')) {
-    value = $(tag).attr('content');
-  } else if ($(tag).attr('itemprop') === 'image' && $(tag).attr('src')) {
-    value = $(tag).attr('src');
-  } else if ($(tag).attr('itemprop') === 'availability' && $(tag).attr('href')) {
-    value = $(tag).attr('href').split('/')[3]
-  } else {
-    value = $(tag).text().replace(/[\n\t\r]+/g, '').replace(/ +(?= )/g, '');
-  }
-  return value.trim();
-}
-
-/**
- * @description Returns array item with provided id
- *
- * @param {Array} items Collection of objects having id property
- * @param {string} id Id of the object to search
- *
- * @returns {Object} Item with provided id
- */
-function arraySearch(items, id) {
-  for (var i = 0; i < items.length; i++)
-    if (items[i].id === id) {
-      return items[i];
-    }
-}
-
-/**
- * @description process given itemtype item and puts it into provided collection for processed items
- *
- * @param {Object} item cheerio HTML node
- * @param {Array} processedItems Collection with already processed items
- */
-function processItemtype(item, processedItems) {
-  processedItems.push({
-    'id':         md5($(item).html()),
-    'name':       $(item).attr('itemtype'),
-    'properties': {}
-  });
-
-}
-
-/**
- * @description process given itemprop item and puts it into provided collection for processed items
- *
- * @param {Object} item cheerio HTML node
- * @param {Array} processedItems Collection with already processed items
- */
-function processItemprop(item, processedItems) {
-  var property, value, itemtypeHtml, currentItem;
-
-  itemtypeHtml = $(item).parents("[itemtype]").html();
-
-  if (itemtypeHtml) {
-    property = $(item).attr('itemprop');
-    value    = getPropValue(item);
-
-    currentItem   = arraySearch(processedItems, md5(itemtypeHtml));
-
-    if (currentItem.properties[property]) {
-      if (!Array.isArray(currentItem.properties[property])) {
-        currentItem.properties[property] = [currentItem.properties[property]];
-      }
-      currentItem.properties[property].push(value);
-    } else {
-      currentItem.properties[property] = value;
-    }
-  }
-}
