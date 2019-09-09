@@ -114,6 +114,32 @@ switch (args[0].split('=')[1]) {
         break;
 }
 
+const RECIPE_CATEGORY_MAP = {
+	'dolci-dessert': 'dolci',
+	secondi: 'secondi piatti',
+	antipasti: 'antipasti',
+	'piatto-unico': 'piatti unici',
+	primi: 'primi piatti',
+	lieviti: 'lievitati',
+	bevande: 'bevande',
+	contorni: 'contorni',
+	'torte-salate-souffle': 'torte salate',
+	'salse-sughi': 'salse e funghi',
+	'conserve-confetture': 'marmellate e conserve',
+	'prima-colazione': 'colazione'
+};
+
+const RECIPE_DIET_MAP = {
+    bio: 'http://schema.org/BioDiet',
+    integrale:'http://schema.org/Integral',
+    light: 'http://schema.org/LowCalorieDiet',
+    'senza glutine':'http://schema.org/GlutenFreeDiet',
+    'senza lattosio':'http://schema.org/FreeMilkDiet',
+    'senza uova':'http://schema.org/FreeEggsDiet',
+    vegano: 'http://schema.org/VeganDiet',
+    vegetariano: 'http://schema.org/VegetarianDiet',
+};
+
 const distinct = function(value, index, self) {
     return self.indexOf(value) === index;
 }
@@ -198,6 +224,7 @@ var getDetails = async function (url) {
         res.on('end', async () => {
             timeout = (Math.random() * (maxTimeout - minTimeout) + minTimeout);
             var urlRegex = /application\/ld\+json">\s+(.+)\s+/gm;
+            var dietRegex = /<a href=".+<span class="path\d+"><\/span><\/span><span class="classificazione-txt hidden-xs">([a-zA-Z ]+)<\/span><\/a>/;
             var matches = [];
             var details = {};
 
@@ -215,17 +242,34 @@ var getDetails = async function (url) {
             if(details.aggregateRating !== undefined)
                 delete details.aggregateRating['@type'];
 
+            details.cookTime = details.prepTime = details.totalTime = '0';
+
             details.prepTime = (details.prepTime == 'PTM') ? 0: parseInt(details.prepTime.match(/[\d.]+/)[0]);
             details.totalTime = (details.totalTime == 'PTM') ? 0: parseInt(details.totalTime.match(/[\d.]+/)[0]);
             details.cookTime = (details.cookTime == 'PTM') ? 0: parseInt(details.cookTime.match(/[\d.]+/)[0]);
 
-            details.recipeCategory = details.recipeCategory.toLowerCase();
+            details.image = details.image.url;
+            details.recipeIngredient = details.recipeIngredient.filter(distinct);
+
+            var recipeCategory = url.replace('https://www.salepepe.it/ricette/', '').split('/')[0];
+
+            if(details.recipeInstructions === undefined)
+                details.recipeInstructions = '';
+
+            details.recipeInstructions = details.recipeInstructions.split(/\d+\) /gm);
+            details.suitableForDiet = [];
+
+            details.recipeCategory = RECIPE_CATEGORY_MAP[recipeCategory];
             details.numStep = details.recipeInstructions.length;
             
-            if(details.description.match(/pesc/) !== null){
+            if(details.description.match(/pesc/) !== null || url.match(/pesce/)){
                 details.mainIngredient = 'pesce';
-            }else if((details.description.match(/carn/) !== null)){
+            }else if((details.description.match(/carn/) !== null || url.match(/carn/))){
                 details.mainIngredient = 'carne';
+            }
+
+            while(match = dietRegex.exec(data)) {
+                details.suitableForDiet.push(RECIPE_DIET_MAP[match[1].toLowerCase()]);
             }
             
             details.ingredients = details.recipeIngredient.map(function(ingredient) {
