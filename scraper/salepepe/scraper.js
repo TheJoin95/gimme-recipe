@@ -5,7 +5,9 @@ var args = process.argv.slice(2);
 if(args.length == 0)
     return "Specifiy the \"action\" params";
 
-var nextPageUrl = 'https://www.giallozafferano.it/ricette-cat/';
+var nextPageUrl = 'https://www.salepepe.it/masterchef_recipe-sitemap0.xml';
+var PAGE_NUM = 1;
+var maxPage = 7;
 var urls = [];
 var duplicated = 0;
 var timeout = 500;
@@ -15,9 +17,10 @@ var minTimeout = 300;
 switch (args[0].split('=')[1]) {
     case 'retrieveAll':
         (async function getUrls (nextPageUrl) {
+            nextPageUrl = nextPageUrl.replace(/\d/, PAGE_NUM);
             console.log("Current page ", nextPageUrl);
             
-            if(nextPageUrl === null) return false;
+            if(PAGE_NUM > maxPage) return false;
             
             const req = https.get(nextPageUrl, async (res) => {
                 const { statusCode } = res;
@@ -30,27 +33,24 @@ switch (args[0].split('=')[1]) {
                 });
         
                 res.on('end', async () => {
+                    var urlRegex = /<loc>(.+)<\/loc>/gm;
                     timeout = (Math.random() * (maxTimeout - minTimeout) + minTimeout);
-                    nextPageUrl = null;
-                    var urlRegex = /gz-title.+href="(?<url>.+)" /gm;
-                    var nextPageRegex = /gz-arrow next.+href="(.+)" /gm;
+                    PAGE_NUM++;
+
                     var matches = [];
                     while (matches = urlRegex.exec(data)) {
-                        urls.push(matches[1]);
-                        var newRecipe = new Recipe({ url: matches[1], author: 'giallozafferano' });
-                        newRecipe.save(function (err, recipe) {
-                            if (err !== null) {
-                                duplicated++;
-                                //console.log(err);
-                            }
-                        });
+                        if(matches[1].match(/ricette/i) !== null) {
+                            urls.push(matches[1]);
+                            var newRecipe = new Recipe({ url: matches[1], author: 'salepepe' });
+                            newRecipe.save(function (err, recipe) {
+                                if (err !== null) {
+                                    duplicated++;
+                                }
+                            });
+                        }
                     }
         
-                    while (matches = nextPageRegex.exec(data))
-                        nextPageUrl = matches[1];
-        
                     await new Promise(resolve => setTimeout(resolve, timeout));
-                    
                     return getUrls(nextPageUrl);
                 });
             });
@@ -61,7 +61,7 @@ switch (args[0].split('=')[1]) {
 
     case "getDetailOfAllRecipes":
         var now = new Date();
-        var criteria = { author: 'giallozafferano', processDate: { $lte: new Date(now.getFullYear(), (now.getMonth() - 1), now.getDay()) } };
+        var criteria = { author: 'salepepe', processDate: { $lte: new Date(now.getFullYear(), (now.getMonth() - 1), now.getDay()) } };
         // var criteria = { processDate: {$exists: false} };
         Recipe.find(
             criteria,
@@ -110,7 +110,7 @@ var getDetails = async function (url) {
 
             delete details['@context'];
             delete details['@type'];
-            details.author = 'giallozafferano';
+            details.author = 'salepepe';
 
             if(details.interactionStatistic !== undefined)
                 delete details.interactionStatistic;
