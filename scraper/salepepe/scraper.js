@@ -95,7 +95,7 @@ switch (args[0].split('=')[1]) {
     case "getDetailOfAllRecipes":
         var now = new Date();
         var criteria = { author: 'salepepe', processDate: { $lte: new Date(now.getFullYear(), (now.getMonth() - 1), now.getDay()) } };
-        // var criteria = { processDate: {$exists: false} };
+        criteria.processDate = {$exists: false};
         Recipe.find(
             criteria,
             { url: 1 },
@@ -248,8 +248,11 @@ var getDetails = async function (url) {
             details.totalTime = (details.totalTime == 'PTM') ? 0: parseInt(details.totalTime.match(/[\d.]+/)[0]);
             details.cookTime = (details.cookTime == 'PTM') ? 0: parseInt(details.cookTime.match(/[\d.]+/)[0]);
 
-            details.image = details.image.url;
-            details.recipeIngredient = details.recipeIngredient.filter(distinct);
+            if(details.image !== undefined)
+                details.image = details.image.url;
+
+            if(details.recipeIngredient !== undefined)
+                details.recipeIngredient = details.recipeIngredient.filter(distinct);
 
             var recipeCategory = url.replace('https://www.salepepe.it/ricette/', '').split('/')[0];
 
@@ -262,19 +265,24 @@ var getDetails = async function (url) {
             details.recipeCategory = RECIPE_CATEGORY_MAP[recipeCategory];
             details.numStep = details.recipeInstructions.length;
             
-            if(details.description.match(/pesc/) !== null || url.match(/pesce/)){
+            if(url.match(/pesce/)){
                 details.mainIngredient = 'pesce';
-            }else if((details.description.match(/carn/) !== null || url.match(/carn/))){
+            }else if((url.match(/carn/))){
                 details.mainIngredient = 'carne';
             }
 
+            let match = [];
             while(match = dietRegex.exec(data)) {
+                data = data.replace(match[0], '');
                 details.suitableForDiet.push(RECIPE_DIET_MAP[match[1].toLowerCase()]);
             }
             
-            details.ingredients = details.recipeIngredient.map(function(ingredient) {
-                return ingredient.replace(/(q\.b\.|\d+\s+g|[\d.]+|[\d.]+\s\w+$|\d+$|kg|rametti|spicchi|l$|\&\w+;$)/g, '').trim().toLowerCase();
-            }).filter(distinct);
+            details.ingredients = [];
+            if(details.recipeIngredient !== undefined) {
+                details.ingredients = details.recipeIngredient.map(function(ingredient) {
+                    return ingredient.replace(/(q\.b\.|\d+\s+g|[\d.]+|[\d.]+\s\w+$|\d+$|kg|rametti|spicchi|l$|\&\w+;$)/g, '').trim().toLowerCase();
+                }).filter(distinct);
+            }
 
             details.numIngredients = details.ingredients.length;
 
