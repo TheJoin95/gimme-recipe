@@ -280,7 +280,7 @@ var getDetails = async function (url) {
             details.ingredients = [];
             if(details.recipeIngredient !== undefined) {
                 details.ingredients = details.recipeIngredient.map(function(ingredient) {
-                    return ingredient.replace(/(q\.b\.|\d+\s+g|[\d.]+|[\d.]+\s\w+$|\d+$|kg|rametti|spicchi|l$|\&\w+;$)/g, '').trim().toLowerCase();
+                    return ingredient.replace(/(q\.b\.|\d+\s+g|[\d.]+|[\d.]+\s\w+$|\d+$|kg|grammi|grammo|numero|da grattugiare|pizzico|decilitro|cucchiaio|cucchiai|cucchiaino|rametto|mazzetto|rametti|spicchi|g$|m$|l$|\&\w+;$)/g, '').trim().toLowerCase();
                 }).filter(distinct);
             }
 
