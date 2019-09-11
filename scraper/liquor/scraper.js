@@ -184,7 +184,7 @@ var getCocktailDetails = async function (url) {
             }
 
             details.processDate = new Date();
-            Wine.updateOne(
+            Cocktail.updateOne(
                 { url: url },
                 details,
                 function(err, raw) {

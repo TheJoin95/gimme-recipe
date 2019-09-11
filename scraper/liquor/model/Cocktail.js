@@ -16,14 +16,14 @@ const cockTailSchema = new mongoose.Schema({
     cocktailType: Array,
     served: Array,
     preparation: Array,
-    strength: String,
-    difficulty: String,
+    strength: Array,
+    difficulty: Array,
     hours: Array,
     themes: Array,
     brands: Array,
     garnish: Array,
     flavor: Array,
-    glass: String,
+    glass: Array,
     ingredientsValue: Array,
     numIngredients: Number
 });
