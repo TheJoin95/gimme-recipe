@@ -25,9 +25,10 @@ const cockTailSchema = new mongoose.Schema({
     flavor: Array,
     glass: Array,
     ingredientsValue: Array,
-    numIngredients: Number
+    numIngredients: Number,
+    recipeInstructions: String
 });
 
-var Cocktail = mongoose.model('Wine', cockTailSchema);
+var Cocktail = mongoose.model('Cocktail', cockTailSchema);
 
 module.exports = Cocktail;

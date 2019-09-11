@@ -101,7 +101,8 @@ var getCocktailDetails = async function (url) {
                 brands: /x-recipe-brands" itemprop="keywords">(.+\s+)<\/div>/gm,
                 garnish: /itemprop="recipeIngredient"><a href='\/\?post_type=recipe&s=(.+)'/gm,
                 glass: /<div class="col-xs-9 recipe-link x-recipe-glasstype no-padding">(.+)<\/div>/gm,
-                flavor: /<a href="\/flavor[\s\w-?_=/]+">([\w\s/-]+)<\/a>/gm
+                flavor: /<a href="\/flavor[\s\w-?_=/]+">([\w\s/-]+)<\/a>/gm,
+                recipeInstructions: /x-recipe-prep" itemprop="recipeInstructions">\s+(.+\s+)<\/div>/gm
             };
 
             var details = {};
@@ -121,6 +122,9 @@ var getCocktailDetails = async function (url) {
                     i++;
                 }
             }
+
+            if(details.recipeInstructions !== undefined)
+                details.recipeInstructions = details.recipeInstructions.replace(htmlRegex, '').trim();
 
             if(details.description !== undefined)
                 details.description = details.description.replace(htmlRegex, '').trim();
