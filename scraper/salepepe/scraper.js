@@ -124,7 +124,7 @@ const RECIPE_CATEGORY_MAP = {
 	bevande: 'bevande',
 	contorni: 'contorni',
 	'torte-salate-souffle': 'torte salate',
-	'salse-sughi': 'salse e funghi',
+	'salse-sughi': 'salse e sughi',
 	'conserve-confetture': 'marmellate e conserve',
 	'prima-colazione': 'colazione'
 };
@@ -242,11 +242,19 @@ var getDetails = async function (url) {
             if(details.aggregateRating !== undefined)
                 delete details.aggregateRating['@type'];
 
-            details.cookTime = details.prepTime = details.totalTime = '0';
+            details.cookTime = details.prepTime = details.totalTime = 0;
 
-            details.prepTime = (details.prepTime == 'PTM') ? 0: parseInt(details.prepTime.match(/[\d.]+/)[0]);
-            details.totalTime = (details.totalTime == 'PTM') ? 0: parseInt(details.totalTime.match(/[\d.]+/)[0]);
-            details.cookTime = (details.cookTime == 'PTM') ? 0: parseInt(details.cookTime.match(/[\d.]+/)[0]);
+            let prepTimeRegex = data.match(/prepTime": "[A-Z]+(\d+)[A-Z]+",/);
+            if(prepTimeRegex !== null)
+                details.prepTime = parseInt(prepTimeRegex[1]);
+
+            let totalTimeRegex = data.match(/totalTime": "[A-Z]+(\d+)[A-Z]+",/);
+            if(totalTimeRegex !== null)
+                details.totalTime = parseInt(totalTimeRegex[1]);
+            
+            let cookTimeRegex = data.match(/cookTime": "[A-Z]+(\d+)[A-Z]+",/);
+            if(cookTimeRegex !== null)
+                details.cookTime = parseInt(cookTimeRegex[1]);
 
             if(details.image !== undefined)
                 details.image = details.image.url;
