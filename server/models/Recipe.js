@@ -17,7 +17,8 @@ const recipeSchema = new mongoose.Schema({
     suitableForDiet: Array,
     nutrition: Object,
     aggregateRating: Object,
-    ingredients: Array
+    ingredients: Array,
+    mainIngredient: String
 });
 
 var Recipe = mongoose.model('Recipe', recipeSchema);

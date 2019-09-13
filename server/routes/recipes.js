@@ -17,15 +17,25 @@ const DIETS = {
 };
 
 const MENU_RECIPE_CATEGORY = {
-    starter: 'Antipasti',
-    firstCourse: 'Primi piatti',
-    secondCourse: 'Secondi piatti',
-    sideDish: { $in: ['Contorni', 'Insalate'] },
-    dessert: 'Dolci',
-    bonus: 'Piatti Unici'
+    starter: 'antipasti',
+    firstCourse: 'primi piatti',
+    secondCourse: 'secondi piatti',
+    sideDish: { $in: ['contorni', 'insalate'] },
+    dessert: 'dolci',
+    bonus: 'piatti unici'
 };
 
-router.get('/gimme-menu', async function(req, res) {
+/* Experimental */
+const PERCENT_TOTAL_TIME_CATEGORY = {
+    starter: 0.15,
+    firstCourse: 0.25,
+    secondCourse: 0.25,
+    sideDish: 0.1,
+    dessert: 0.25,
+    bonus: 0.5
+};
+
+router.get('/gimme-menu', async function (req, res) {
     var menu = {
         starter: null,
         firstCourse: null,
@@ -51,20 +61,20 @@ router.get('/gimme-menu', async function(req, res) {
         menuKeys = Object.keys(menu);
     }
 
+    let totalTime = criteria['totalTime']['$lte'];
     if(req.query.totalTime !== undefined && req.query.totalTime > 0) {
-        criteria['totalTime']['$lte'] = parseInt(criteria['totalTime']['$lte'] / menuKeys.length);
+        criteria['totalTime']['$lte'] = parseInt(totalTime / menuKeys.length);
     }
 
     for(let index in menuKeys) {
         criteria['recipeCategory'] = MENU_RECIPE_CATEGORY[menuKeys[index]];
 
-        // Questa valutazione è da fare in fase di scraping
         if(criteria['recipeCategory'] == MENU_RECIPE_CATEGORY.secondCourse && menu.firstCourse !== undefined && menu.firstCourse !== null){
-            criteria['description'] = (menu.firstCourse.description.match(/pesc/) !== null) ? /pesce/i : /carn/i;
+            criteria['mainIngredient'] = (menu.firstCourse.mainIngredient === 'pesce') ? 'pesce' : 'carne';
         }else if(criteria['recipeCategory'] == MENU_RECIPE_CATEGORY.firstCourse && menu.secondCourse !== undefined && menu.secondCourse !== null){
-            criteria['description'] = (menu.firstCourse.description.match(/pesc/) !== null) ? /pesce/i : /carn/i;
-        }else if(criteria['description'] !== undefined){
-            delete criteria['description'];
+            criteria['mainIngredient'] = (menu.firstCourse.mainIngredient === 'pesce') ? 'pesce' : 'carne';
+        }else if(criteria['mainIngredient'] !== undefined){
+            delete criteria['mainIngredient'];
         }
 
         menu[menuKeys[index]] = await Recipe.aggregate()
@@ -78,7 +88,7 @@ router.get('/gimme-menu', async function(req, res) {
     res.json(menu);
 });
 
-router.get('/random', async function(req, res) {
+router.get('/random', async function (req, res) {
     const criteria = buildAdvancedCriteria({}, req.query);
 
     const recipe = await Recipe.aggregate()
@@ -89,7 +99,7 @@ router.get('/random', async function(req, res) {
     res.json(recipe);
 });
 
-router.get('/low-budget', async function(req, res) {
+router.get('/low-budget', async function (req, res) {
     const recipes = await Recipe.find(
         buildAdvancedCriteria({ estimatedCost: 'Basso' }, req.query),
         {},
@@ -99,11 +109,15 @@ router.get('/low-budget', async function(req, res) {
     res.json(recipes);
 });
 
-router.get('/by-calories/:calories', async function(req, res) {
+router.get('/by-calories/:calories', async function (req, res) {
     if(req.params.calories === undefined)
-        res.status(400).send('No calories specified');
+        res.status(400).send('No calories amount specified');
     
-    const criteria = buildAdvancedCriteria({ 'nutrition.calories': {'$lte': req.params.calories} }, req.query);
+    let calories = parseInt(req.params.calories);
+    if(calories <= 0)
+        res.status(400).send("You need to specify a number greater than 0");
+    
+    const criteria = buildAdvancedCriteria({ 'nutrition.calories': {'$lte': calories} }, req.query);
 
     const recipes = await Recipe.find(
         criteria,
@@ -114,7 +128,7 @@ router.get('/by-calories/:calories', async function(req, res) {
     res.json(recipes);
 });
 
-router.get('/by-ingredients', async function(req, res) {
+router.get('/by-ingredients', async function (req, res) {
     if(req.query.ingredients === undefined)
         res.status(400).send('You need to specify at least one ingredient');
 
@@ -123,13 +137,13 @@ router.get('/by-ingredients', async function(req, res) {
     const recipes = await Recipe.find(
         criteria,
         {},
-        { limit: 20 }
+        { limit: 20, sort: { score: -1 } }
     );
 
     res.json(recipes);
 });
 
-router.get('/suitable-diet/:diet', async function(req, res) {
+router.get('/suitable-diet/:diet', async function (req, res) {
     if(DIETS[req.params.diet] === undefined)
         res.status(400).send('Bad request ' + req.params.diet + ' is not supported');
 
@@ -143,7 +157,7 @@ router.get('/suitable-diet/:diet', async function(req, res) {
     res.json(recipes);
 });
 
-router.get('/time-saver', async function(req, res) {
+router.get('/time-saver', async function (req, res) {
     const criteria = { totalTime: { $lte: 20 } };
 
     const recipes = await Recipe.find(
@@ -154,7 +168,7 @@ router.get('/time-saver', async function(req, res) {
     res.json(recipes);
 });
 
-router.get('/easy-todo', async function(req, res) {
+router.get('/easy-todo', async function (req, res) {
     const criteria = buildAdvancedCriteria({ prepTime: {$lte: 10} }, req.query);
 
     const recipes = await Recipe.find(
@@ -166,7 +180,7 @@ router.get('/easy-todo', async function(req, res) {
     res.json(recipes);
 });
 
-router.get('/most-rated', async function(req, res){
+router.get('/most-rated', async function (req, res){
     var criteria = { 'aggregateRating.ratingCount': {'$gte': 100} };
 
     criteria = buildAdvancedCriteria(criteria, req.query);
@@ -180,11 +194,11 @@ router.get('/most-rated', async function(req, res){
     res.json(recipes);
 });
 
-const buildAdvancedCriteria = function(criteria, queryParams) {
-    const { recipeCategory, suitableForDiet, ingredients } = getQueryParams(queryParams);
+const buildAdvancedCriteria = function (criteria, queryParams) {
+    const { recipeCategory, suitableForDiet, ingredients, totalTime } = getQueryParams(queryParams);
 
     if(ingredients !== undefined)
-        criteria['ingredients'] = ingredients;
+        criteria['$text'] = { $search: ingredients.map((ingr) => { return "\"" + ingr + "\""; }).join(" ") };
 
     if(recipeCategory !== undefined)
         criteria['recipeCategory'] = recipeCategory;
@@ -192,14 +206,18 @@ const buildAdvancedCriteria = function(criteria, queryParams) {
     if(suitableForDiet !== undefined)
         criteria['suitableForDiet'] = suitableForDiet;
 
+    if(totalTime !== undefined)
+        criteria['totalTime'] = totalTime;
+
     return criteria;
 }
 
-const getQueryParams = function(queryParams)  {
+const getQueryParams = function (queryParams)  {
     const params = {};
 
     if(queryParams.ingredients !== undefined && typeof(queryParams.ingredients) === 'object'){
-        params['ingredients'] = { $all: queryParams.ingredients.map((entry) => { return new RegExp(entry.trim().toLowerCase(), 'i'); }) };
+        params['ingredients'] = queryParams.ingredients;
+        // params['ingredients'] = { $all: queryParams.ingredients.map((entry) => { return new RegExp(entry.trim().toLowerCase(), 'i'); }) };
     }
 
     if(queryParams.totalTime !== undefined && queryParams.totalTime > 0)
