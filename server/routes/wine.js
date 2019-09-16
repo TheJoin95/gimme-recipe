@@ -2,6 +2,14 @@ const express = require('express');
 const Wine = require('../models/Wine');
 const router = express.Router();
 
+const FOOD_ABBINATION_TRANSLATOR = {
+    'carni-rosse': 'carn ross',
+    'carni-bianche': 'carn bianc',
+    'formaggi-freschi': 'formaggi fresc',
+    'formaggi-stagionati': 'formaggi stagionat',
+    pesce: 'pesce'
+};
+
 router.get('/random', async function(req, res) {
     const criteria = buildAdvancedCriteria({}, req.query);
 
@@ -18,6 +26,9 @@ router.get('/food-abbination', async function(req, res) {
     if(req.query.ingredients === undefined)
         res.status(400).send('You need to specify at least one ingredient');
 
+    // Se non è presente il parametro FOOD_ABBINATION_TRANSLATOR
+    // Allora cerco tramite i vari ingredienti della ricetta
+    
     const criteria = buildAdvancedCriteria({}, req.query);
     
     const wines = await Wine.find(
