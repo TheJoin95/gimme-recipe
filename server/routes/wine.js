@@ -25,11 +25,14 @@ router.get('/random', async function(req, res) {
 router.get('/food-abbination', async function(req, res) {
     if(req.query.ingredients === undefined)
         res.status(400).send('You need to specify at least one ingredient');
+    
+    const criteria = buildAdvancedCriteria({}, req.query);
 
     // Se non è presente il parametro FOOD_ABBINATION_TRANSLATOR
     // Allora cerco tramite i vari ingredienti della ricetta
-    
-    const criteria = buildAdvancedCriteria({}, req.query);
+    if(req.query.foodAbbination !== undefined && FOOD_ABBINATION_TRANSLATOR[req.query.foodAbbination] !== undefined) {
+        criteria['$text']['$search'] = '\"' + FOOD_ABBINATION_TRANSLATOR[req.query.foodAbbination] + '\"';
+    }
     
     const wines = await Wine.find(
         criteria,
