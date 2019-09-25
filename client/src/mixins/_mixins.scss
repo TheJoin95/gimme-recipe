@@ -19,3 +19,26 @@
     @content;
   }
 }
+
+@mixin reset-button {
+  border: none;
+  background: none;
+  margin: 0;
+  padding: 0;
+}
+
+@mixin pull-right {
+  float: right;
+}
+
+@mixin pull-left {
+  float: left;
+}
+
+@mixin clearfix {
+  clear: both;
+}
+
+@mixin reset-outline {
+  outline: none;
+}

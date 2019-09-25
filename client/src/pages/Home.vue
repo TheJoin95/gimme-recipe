@@ -1,7 +1,7 @@
 <template>
-  <!-- <div class="home">
+  <div class="home">
     <span translate-comment="Welcome Message" v-translate>Welcome!</span>
-  </div> -->
+  </div>
 </template>
 
 <script lang="ts">

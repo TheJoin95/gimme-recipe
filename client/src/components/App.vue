@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <Menu></Menu>
-
     <transition appear mode="out-in">
       <router-view class="page" />
     </transition>
@@ -124,9 +123,6 @@ body,
 
   padding: 0;
   margin: 0;
-
-  left: 0;
-  top: 0;
 }
 
 em {
