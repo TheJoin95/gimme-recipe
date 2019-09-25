@@ -33,12 +33,8 @@ class RecipeApi {
   private _model: any = null
 
   private readonly _apis: Endpoints = {
-    mostRated: 'http://10.64.145.156:3000/recipe/most-rated'
+    mostRated: 'http://localhost:3000/recipe/most-rated'
   }
-
-  // private isMostRatedKey = (mostRated: MostRated, param: string): param is keyof MostRated => {
-  //   return param in mostRated
-  // }
 
   set model (model: any) {
     this._model = model
@@ -55,30 +51,11 @@ class RecipeApi {
 
     if (!error) {
       const recipes: Array<MostRated> = []
-      // console.log(response)
-      // Vue.set(this._model, 'mostRated', response.data.value)
-
-      // response.data.forEach((recipe: MostRated, index: number) => {
-      //   const mostRatedRecipe: any = {}
-
-      //   Object.keys(recipe).forEach((key: string) => {
-      //     console.log(recipe, key, this.isMostRatedKey(recipe, key))
-      //     debugger
-
-      //     if (this.isMostRatedKey(recipe, key)) {
-      //       // recipes.push(recipe[index])
-      //       mostRatedRecipe[key] = recipe[key]
-      //     }
-      //   })
-
-      //   recipes.push(mostRatedRecipe)
-      // })
 
       response.data.forEach((recipe: MostRated) => {
         recipes.push(recipe)
       })
 
-      // const recipes: Array<MostRated> = Array.from(response.data as Array<MostRated>)
       Vue.set(this._model, 'mostRated', recipes)
     }
 

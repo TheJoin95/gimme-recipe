@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <Menu></Menu>
 
     <transition appear mode="out-in">
       <router-view class="page" />
@@ -81,8 +78,8 @@ export default Vue.extend({
 
 <style lang="scss">
 @import '~node-reset-scss/scss/reset';
-@import 'variables';
-@import 'fonts';
+@import '../mixins/variables';
+@import '../mixins/fonts';
 
 html,
 body,
@@ -132,33 +129,6 @@ body,
   top: 0;
 }
 
-// h1 {
-// }
-
-// h2 {
-// }
-
-// h3 {
-// }
-
-// h4 {
-// }
-
-// h5 {
-// }
-
-// h6 {
-// }
-
-// p {
-// }
-
-// span {
-// }
-
-// a {
-// }
-
 em {
   font-style: italic;
 }
@@ -166,11 +136,6 @@ em {
 strong {
   font-weight: bold;
 }
-
-// input,
-// select,
-// button {
-// }
 
 .v-enter-active,
 .v-leave-active {

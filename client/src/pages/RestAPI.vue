@@ -5,9 +5,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import RecipeApi, { MostRated } from '@/services/RecipeApi'
-
-// console.log(MostRated)
+import RecipeApi, { MostRated } from '../services/RecipeApi'
 
 export default Vue.extend({
   name: 'RestAPI',
