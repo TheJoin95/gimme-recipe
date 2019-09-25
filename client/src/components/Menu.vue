@@ -127,6 +127,7 @@ export default Vue.extend({
     height: 100%;
     z-index: 10;
     background: rgb(255, 167, 73);
+    overflow-y: auto;
   }
 
   .menu-close-button {
@@ -146,7 +147,7 @@ export default Vue.extend({
   .menu-element {
     display: inline-block;
     padding: 4vh 4.5vw;
-    margin: 2.5vh 1.5vw;
+    margin: 1.7vh 1.3vw;
     width: 31vw;
     background: #ffffff56;
     border-radius: 3.5vw;
