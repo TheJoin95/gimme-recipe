@@ -7,7 +7,6 @@
         <button class="home-button">Gimme Recipe</button>
       </router-link>
     </div>
-    <magic-salad></magic-salad>
   </div>
 </template>
 
@@ -40,11 +39,6 @@ export default Vue.extend({
   .home-box {
     text-align: center;
     margin-top: 13vh;
-
-    h1 {
-      font-size: 2.8em;
-      color: #1f2121;
-    }
 
     p {
       font-style: italic;

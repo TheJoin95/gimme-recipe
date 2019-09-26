@@ -128,6 +128,11 @@ body,
   margin: 0;
 }
 
+h1 {
+  font-size: 2.8em;
+  color: #1f2121;
+}
+
 em {
   font-style: italic;
 }
