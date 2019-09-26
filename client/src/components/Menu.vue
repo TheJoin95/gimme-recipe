@@ -65,40 +65,40 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue'
 
 export default Vue.extend({
-  name: "Menu" as string,
+  name: 'Menu' as string,
 
-  data: function() {
+  data: function () {
     return {
-      isOpen: true
-    };
+      isOpen: false
+    }
   },
 
   props: {
     language: {
-      default: "",
+      default: '',
       type: String,
       required: false
     },
 
     domain: {
-      default: "",
+      default: '',
       type: String,
       required: false
     }
   },
 
-  mounted() {},
-  
+  mounted () {},
+
   watch: {
-    '$route': function(to, from) {
-      this.isOpen = false;
+    '$route': function (to, from) {
+      this.isOpen = false
     }
   }
 
-});
+})
 </script>
 
 <style lang="scss">
@@ -132,9 +132,10 @@ export default Vue.extend({
 
   .menu-close-button {
     @include reset-button;
-    @include pull-right;
 
     color: rgb(255, 102, 0);
+    position: absolute;
+    right: 0;
     font-size: 1.5em;
     padding-right: 0.5em;
     padding-top: 0.5em;
@@ -148,7 +149,7 @@ export default Vue.extend({
     display: inline-block;
     padding: 4vh 4.5vw;
     margin: 1.7vh 1.3vw;
-    width: 31vw;
+    width: 33vw;
     background: #ffffff56;
     border-radius: 3.5vw;
     vertical-align: top;

@@ -107,6 +107,9 @@ body,
 
   padding: 0;
   margin: 0;
+
+  background-image: url("../assets/img/bg-mobile-image-white.jpg");
+  background-size: cover;
 }
 
 .page {

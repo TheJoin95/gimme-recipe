@@ -42,3 +42,11 @@
 @mixin reset-outline {
   outline: none;
 }
+
+@mixin shake-animation {
+  -webkit-animation: shake 2s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@mixin rotate-animation {
+  -webkit-animation: rotation 3s linear;
+}

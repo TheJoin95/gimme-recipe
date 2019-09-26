@@ -10,5 +10,9 @@
   {
     "name": "RestAPI",
     "path": "/restAPI"
+  },
+  {
+    "name": "Random",
+    "path": "/recipe/random"
   }
 ]
