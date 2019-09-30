@@ -1,9 +1,7 @@
 <template>
-  <div class="random">
-    <div class="random-box">
-      <h1>Shake the Magic Salad</h1>
-      <p>By shaking you will get the recipe</p>
-      <magic-item v-bind:type=" 'wine' "></magic-item>
+  <div class="result">
+    <div class="result-box">
+      <h1>Result</h1>
     </div>
   </div>
 </template>
@@ -12,14 +10,14 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'Random',
+  name: 'Result',
 
   metaInfo () {
     return {
-      title: 'Random',
+      title: 'Result',
 
       meta: [
-        { vmid: 'ogtitle', property: 'og:title', itemprop: 'name', content: 'Random' },
+        { vmid: 'ogtitle', property: 'og:title', itemprop: 'name', content: 'Result' },
         { vmid: 'description', name: 'description', content: 'A Vue/TypeScript boilerplate Home Page.' },
         { vmid: 'ogdescription', property: 'og:description', content: 'A Vue/TypeScript boilerplate Home Page.' }
       ]
@@ -33,7 +31,7 @@ export default Vue.extend({
 @import '../mixins/animations';
 @import '../mixins/mixins';
 
-.random {
+.result {
   text-align: center;
   margin-top: 13vh;
 

@@ -1,18 +1,47 @@
 [
   {
     "path": "/",
-    "name": "Home"
+    "name": "Home",
+    "template": "Home"
   },
   {
     "name": "About",
-    "path": "/about"
+    "path": "/about",
+    "template": "About"
   },
   {
     "name": "RestAPI",
-    "path": "/restAPI"
+    "path": "/restAPI",
+    "template": "RestAPI"
   },
   {
-    "name": "Random",
-    "path": "/recipe/random"
+    "name": "Random Recipe",
+    "path": "/recipe/random",
+    "template": "Random"
+  },
+  {
+    "name": "Random Wine",
+    "path": "/wine/random",
+    "template": "Random"
+  },
+  {
+    "name": "Random Cocktail",
+    "path": "/cocktail/random",
+    "template": "Random"
+  },
+  {
+    "name": "Result Recipe",
+    "path": "/recipe/result",
+    "template": "Result"
+  },
+  {
+    "name": "Result Wine",
+    "path": "/wine/result",
+    "template": "Result"
+  },
+  {
+    "name": "Result Cocktail",
+    "path": "/cocktail/result",
+    "template": "Result"
   }
 ]

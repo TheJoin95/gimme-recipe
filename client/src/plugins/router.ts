@@ -22,7 +22,7 @@ let routes: Array<Route> = Array.from(pages, (page: Route) => {
 
     component: () => import(
       /* webpackChunkName: "[request]" */
-      `../pages/${page.name}.vue`
+      `../pages/${page.template}.vue`
     )
   }
 })
