@@ -8,6 +8,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import Shake from 'shake.js'
 
 export default Vue.extend({
   name: 'MagicItem' as string,
@@ -63,6 +64,10 @@ export default Vue.extend({
       }
     },
 
+    onShake: function (e) {
+      this.toggleAnimation()
+    },
+
     onDeviceMotion: function (e) {
       var current = e.accelerationIncludingGravity || {}
 
@@ -109,15 +114,22 @@ export default Vue.extend({
   },
 
   mounted () {
-    window.addEventListener('deviceorientation', this.onDeviceMotion, false)
-    window.addEventListener('orientationchange', this.onDeviceMotion, false)
-    window.addEventListener('devicemotion', this.onDeviceMotion, false)
+    // window.addEventListener('deviceorientation', this.onDeviceMotion, false)
+    // window.addEventListener('orientationchange', this.onDeviceMotion, false)
+    // window.addEventListener('devicemotion', this.onDeviceMotion, false)
+    var myShakeEvent = new Shake({
+      threshold: 10,
+      timeout: 1000
+    })
+
+    window.addEventListener('shake', this.onShake, false)
   },
 
   beforeDestroy () {
-    window.removeEventListener('deviceorientation', this.onDeviceMotion, false)
-    window.removeEventListener('orientationchange', this.onDeviceMotion, false)
-    window.removeEventListener('devicemotion', this.onDeviceMotion, false)
+    // window.removeEventListener('deviceorientation', this.onDeviceMotion, false)
+    // window.removeEventListener('orientationchange', this.onDeviceMotion, false)
+    // window.removeEventListener('devicemotion', this.onDeviceMotion, false)
+    window.removeEventListener('shake', this.onShake, false)
   }
 
 })
