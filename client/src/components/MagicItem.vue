@@ -9,12 +9,17 @@
 <script lang="ts">
 import Vue from 'vue'
 import Shake from 'shake.js'
+import RecipeApi, { MostRated } from '../services/RecipeApi'
 
 export default Vue.extend({
   name: 'MagicItem' as string,
 
   data: function () {
     return {
+      recipes: {
+        mostRated: [] as Array<MostRated>,
+        loading: false as boolean
+      },
       animationClass: '',
       lastX: null,
       lastY: null,
@@ -55,6 +60,9 @@ export default Vue.extend({
       var timeDifference = currentTime.getTime() - this.lastTime.getTime()
 
       if (timeDifference > this.options.timeout) {
+        RecipeApi.model = self.recipes
+        RecipeApi.getMostRatedRecipes()
+
         this.lastTime = new Date()
         this.animationClass = 'magic-item-animation'
 
@@ -110,6 +118,14 @@ export default Vue.extend({
       this.lastX = current.x
       this.lastY = current.y
       this.lastZ = current.z
+    }
+  },
+
+  watch: {
+    'recipes.loading' (loading) {
+      if (!loading) {
+        console.log(this.recipes.mostRated)
+      }
     }
   },
 

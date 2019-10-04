@@ -3,7 +3,7 @@
     <div class="random-box">
       <h1>Shake the Magic Salad</h1>
       <p>By shaking you will get the recipe</p>
-      <magic-item v-bind:type=" 'wine' "></magic-item>
+      <magic-item v-bind:type=" type "></magic-item>
     </div>
   </div>
 </template>
@@ -13,6 +13,12 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'Random',
+
+  data () {
+    return {
+      type: this.$route.path.split('/')[1]
+    }
+  },
 
   metaInfo () {
     return {
