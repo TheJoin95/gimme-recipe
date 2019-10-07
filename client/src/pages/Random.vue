@@ -1,22 +1,48 @@
 <template>
-  <div class="random">
-    <div class="random-box">
+  <div class="random" v-bind:class="{ mtop13: hasMargin }">
+    <div v-if="showMagicItem === true" class="random-box">
       <h1>Shake the Magic Salad</h1>
       <p>By shaking you will get the recipe</p>
       <magic-item v-bind:type=" type "></magic-item>
     </div>
+    <transition appear mode="out-in">
+      <result v-if="resultData.length > 0 && showResult === true" v-bind:data=" resultData "></result>
+    </transition>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import RecipeApi, { MostRated } from '../services/RecipeApi'
 
 export default Vue.extend({
   name: 'Random',
 
   data () {
     return {
-      type: this.$route.path.split('/')[1]
+      showMagicItem: true,
+      showResult: false,
+      hasMargin: true,
+      type: this.$route.path.split('/')[1],
+      resultData: [] as Array<MostRated>
+    }
+  },
+
+  methods: {
+    hideResult: function () {
+      this.showResult = false
+      this.showMagicItem = true
+      this.hasMargin = true
+    },
+
+    setResultData: function (data) {
+      var self = this
+      this.resultData = data
+      setTimeout(function () {
+        self.showResult = true
+        self.showMagicItem = false
+        self.hasMargin = false
+      }, 2500)
     }
   },
 
@@ -39,16 +65,19 @@ export default Vue.extend({
 @import '../mixins/animations';
 @import '../mixins/mixins';
 
+.mtop13 {
+  margin-top: 13vh;
+}
+
 .random {
   text-align: center;
-  margin-top: 13vh;
 
-  h1 {
+  .random-box h1 {
     font-size: 2.8em;
     color: #1f2121;
   }
 
-  p {
+  .random-box p {
     font-style: italic;
     color: #a0a0a0;
     margin: 0.5em 0 2em;

@@ -124,7 +124,8 @@ export default Vue.extend({
   watch: {
     'recipes.loading' (loading) {
       if (!loading) {
-        console.log(this.recipes.mostRated)
+        this.$root.$data.result = this.recipes.mostRated
+        this.$parent.setResultData(this.recipes.mostRated)
       }
     }
   },

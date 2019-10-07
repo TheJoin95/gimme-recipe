@@ -30,6 +30,11 @@
     "template": "Random"
   },
   {
+    "name": "Result Page",
+    "path": "/recipe/result",
+    "template": "Result"
+  },
+  {
     "name": "Result Recipe",
     "path": "/recipe/result",
     "template": "Result"

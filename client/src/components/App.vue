@@ -13,6 +13,12 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'App' as string,
 
+  data () {
+    return {
+      result: []
+    }
+  },
+
   props: {
     version: {
       type: String,
@@ -99,7 +105,7 @@ body,
   font-kerning: none;
 
   position: absolute;
-  overflow: hidden;
+  overflow: auto;
   color: $black;
 
   height: 100%;

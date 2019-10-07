@@ -1,8 +1,7 @@
 <template>
-  <div class="result">
-    <div class="result-box">
-      <h1>Result</h1>
-    </div>
+  <div>
+    <h1>result</h1>
+    <result v-bind:data="data"></result>
   </div>
 </template>
 
@@ -12,9 +11,19 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'Result',
 
+  data: function () {
+    return {
+      data: this.$root.$data
+    }
+  },
+
+  created () {
+    console.log(this.$root.data)
+  },
+
   metaInfo () {
     return {
-      title: 'Result',
+      title: 'Result Page',
 
       meta: [
         { vmid: 'ogtitle', property: 'og:title', itemprop: 'name', content: 'Result' },
