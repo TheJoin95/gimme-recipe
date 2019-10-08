@@ -20,10 +20,10 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCocktail, faUtensils, faWineGlassAlt, faSearch, faHome, faRandom, faHeart, faBars, faTimes, faUserCog, faExternalLinkAlt, faStar, faUsers, faClock } from '@fortawesome/free-solid-svg-icons'
+import { faCocktail, faUtensils, faWineGlassAlt, faSearch, faHome, faRandom, faHeart, faBars, faTimes, faUserCog, faExternalLinkAlt, faStar, faUsers, faClock, faRedo } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faCocktail, faUtensils, faWineGlassAlt, faSearch, faHeart, faHome, faRandom, faBars, faTimes, faUserCog, faExternalLinkAlt, faStar, faUsers, faClock)
+library.add(faCocktail, faUtensils, faWineGlassAlt, faSearch, faHeart, faHome, faRandom, faBars, faTimes, faUserCog, faExternalLinkAlt, faStar, faUsers, faClock, faRedo)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.use(Meta)

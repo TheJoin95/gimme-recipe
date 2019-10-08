@@ -1,5 +1,6 @@
 <template>
   <div class="random" v-bind:class="{ mtop13: hasMargin }">
+    <button v-if="showMagicItem === false" v-on:click="hideResult()" class="retry-button"><font-awesome-icon :icon="['fas', 'redo']" /></button>
     <div v-if="showMagicItem === true" class="random-box">
       <h1>Shake the Magic Salad</h1>
       <p>By shaking you will get the recipe</p>
@@ -13,7 +14,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import RecipeApi, { MostRated } from '../services/RecipeApi'
+import RecipeApi, { Recipe } from '../services/RecipeApi'
 
 export default Vue.extend({
   name: 'Random',
@@ -24,7 +25,7 @@ export default Vue.extend({
       showResult: false,
       hasMargin: true,
       type: this.$route.path.split('/')[1],
-      resultData: [] as Array<MostRated>
+      resultData: [] as Array<Recipe>
     }
   },
 
@@ -81,6 +82,22 @@ export default Vue.extend({
     font-style: italic;
     color: #a0a0a0;
     margin: 0.5em 0 2em;
+  }
+
+  .retry-button {
+    @include reset-outline;
+    @include reset-button;
+
+    background: #ffa749;
+    border: none;
+    padding: 1rem 1rem;
+    color: #fff;
+    border-radius: 4em;
+    position: absolute;
+    font-size: 1.3em;
+    right: 0.3em;
+    top: 1.3em;
+    z-index: 2;
   }
 }
 </style>

@@ -15,7 +15,7 @@ interface Nutrition {
   calories: number
 }
 
-export interface MostRated {
+export interface Recipe {
   suitableForDiet: Array<string>,
   nutrition: Array<Nutrition>,
   ingredients: Array<string>,
@@ -31,32 +31,61 @@ export interface MostRated {
 
 class RecipeApi {
   private _model: any = null
+  private BASE_URL: string = 'http://localhost:3000'
 
   private readonly _apis: Endpoints = {
-    mostRated: 'http://localhost:3000/recipe/most-rated'
+    random: '/recipe/random',
+    menu: '/recipe/gimme-menu',
+    lowBudget: '/recipe/low-budget',
+    calories: '/recipe/by-calories/:calories',
+    ingredients: '/recipe/by-ingredients',
+    diet: '/recipe/suitable-diet/:diet',
+    timeSaver: '/recipe/time-saver',
+    easy: '/recipe/easy-todo',
+    mostRated: '/recipe/most-rated'
   }
 
   set model (model: any) {
     this._model = model
     Vue.set(this._model, 'loading', false)
-    Vue.set(this._model, 'mostRated', null)
+    Vue.set(this._model, 'result', null)
+  }
+
+  async getRandomRecipe (): Promise<any> {
+    Vue.set(this._model, 'loading', true)
+
+    const [error, response] = await to(axios.request({
+      url: this.BASE_URL + this._apis.random
+    }))
+
+    if (!error) {
+      const recipes: Array<Recipe> = []
+
+      response.data.forEach((recipe: Recipe) => {
+        recipes.push(recipe)
+      })
+
+      Vue.set(this._model, 'result', recipes)
+    }
+
+    Vue.set(this._model, 'loading', false)
   }
 
   async getMostRatedRecipes (): Promise<any> {
     Vue.set(this._model, 'loading', true)
 
     const [error, response] = await to(axios.request({
-      url: this._apis.mostRated
+      url: this.BASE_URL + this._apis.mostRated
     }))
 
     if (!error) {
-      const recipes: Array<MostRated> = []
+      const recipes: Array<Recipe> = []
 
-      response.data.forEach((recipe: MostRated) => {
+      response.data.forEach((recipe: Recipe) => {
         recipes.push(recipe)
       })
 
-      Vue.set(this._model, 'mostRated', recipes)
+      Vue.set(this._model, 'result', recipes)
     }
 
     Vue.set(this._model, 'loading', false)

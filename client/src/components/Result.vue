@@ -9,12 +9,12 @@
         <img
           class="card-image"
           v-if="item.image !== undefined && item.image !== '' && item.image !== null"
-          :src="item.image"
+          v-lazy="item.image"
         />
         <button class="card-goto-button" v-on:click="openLink(item.url)">
           <font-awesome-icon :icon="['fas', 'external-link-alt']" />
           </button>
-        <h4 class="card-title">{{ item.name }}</h4>
+        <h4 class="card-title">{{ unescape(item.name) }}</h4>
         <p class="card-subtitle">
           <span v-if="item.aggregateRating !== undefined" class="card-rating">
             <font-awesome-icon :icon="['fas', 'star']" />&nbsp;{{ item.aggregateRating.ratingValue }} - <font-awesome-icon :icon="['fas', 'users']" />&nbsp;{{ item.aggregateRating.ratingCount }} reviews
@@ -31,7 +31,11 @@
 
 <script lang='ts'>
 import Vue from 'vue'
-import RecipeApi, { MostRated } from '../services/RecipeApi'
+import RecipeApi, { Recipe } from '../services/RecipeApi'
+import VueLazyload from 'vue-lazyload'
+import { unescape } from 'lodash'
+
+Vue.use(VueLazyload)
 
 export default Vue.extend({
   name: 'Result' as string,
@@ -43,6 +47,10 @@ export default Vue.extend({
   },
 
   methods: {
+    unescape: function (tounescape) {
+      return unescape(tounescape)
+    },
+
     openLink: function (link) {
       window.open(link)
     }
@@ -161,7 +169,7 @@ export default Vue.extend({
     color: #fff;
     border-radius: 4em;
     position: absolute;
-    bottom: 35%;
+    margin-top: -9vh;
     font-size: 1.3em;
     right: 0.3em;
   }
