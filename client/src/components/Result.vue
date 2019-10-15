@@ -1,6 +1,6 @@
 <template>
   <div class="result">
-    <div class="result-list">
+    <div class="result-list border-purple">
       <div class="card" v-for="item in data" v-bind:key="item.url">
         <span
             v-if="item.recipeCategory !== undefined"
@@ -33,7 +33,7 @@
 import Vue from 'vue'
 import RecipeApi, { Recipe } from '../services/RecipeApi'
 import VueLazyload from 'vue-lazyload'
-import { unescape } from 'lodash'
+import he from 'he'
 
 Vue.use(VueLazyload)
 
@@ -48,7 +48,7 @@ export default Vue.extend({
 
   methods: {
     unescape: function (tounescape) {
-      return unescape(tounescape)
+      return he.decode(tounescape)
     },
 
     openLink: function (link) {

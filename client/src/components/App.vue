@@ -83,6 +83,9 @@ export default Vue.extend({
 
 <style lang="scss">
 @import '~node-reset-scss/scss/reset';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 @import '../mixins/variables';
 @import '../mixins/fonts';
 
