@@ -1,6 +1,6 @@
 <template>
   <div class="result">
-    <div class="result-list border-purple">
+    <div class="result-list">
       <div class="card" v-for="item in data" v-bind:key="item.url">
         <span
             v-if="item.recipeCategory !== undefined"
@@ -96,9 +96,12 @@ export default Vue.extend({
   padding: 24px;
   margin: 0.5rem 0 1rem 0;
   border-radius: 2px;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: #fff;
   border-top-right-radius: 3em;
   border-top-left-radius: 3em;
+  border-bottom-right-radius: 3em;
+  border-bottom-left-radius: 3em;
+
   padding-top: 5vh;
 
   overflow: auto;

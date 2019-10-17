@@ -50,3 +50,16 @@
 @mixin rotate-animation {
   -webkit-animation: rotation 3s linear;
 }
+
+@mixin slideInUp {
+  -webkit-animation-name: slideInUp;
+  animation-name: slideInUp;
+}
+
+.slideInUp-enter-active {
+  animation: slideInUp 3s;
+}
+
+.slideInUp-leave-active {
+  animation: slideInUp 3s reverse;
+}

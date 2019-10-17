@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <Menu></Menu>
     <transition appear mode="out-in">
       <router-view class="page" />
@@ -83,9 +84,13 @@ export default Vue.extend({
 
 <style lang="scss">
 @import '~node-reset-scss/scss/reset';
+
+/*
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+*/
+
 @import '../mixins/variables';
 @import '../mixins/fonts';
 

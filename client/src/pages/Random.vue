@@ -6,7 +6,11 @@
       <p>By shaking you will get the recipe</p>
       <magic-item v-bind:type=" type "></magic-item>
     </div>
-    <transition appear mode="out-in">
+    <transition
+      name="custom-classes-transition"
+      enter-active-class="animated tada"
+      leave-active-class="animated bounceOutRight"
+    >
       <result v-if="resultData.length > 0 && showResult === true" v-bind:data=" resultData "></result>
     </transition>
   </div>
@@ -38,7 +42,7 @@ export default Vue.extend({
 
     setResultData: function (data) {
       var self = this
-      this.resultData = data
+      this.resultData = (data === null) ? [] : data
       setTimeout(function () {
         self.showResult = true
         self.showMagicItem = false

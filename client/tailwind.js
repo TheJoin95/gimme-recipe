@@ -3,5 +3,8 @@ module.exports = {
     extend: {}
   },
   variants: {},
+  corePlugins: {
+    fontFamily: false
+  },
   plugins: []
 }
