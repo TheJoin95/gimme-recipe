@@ -1,9 +1,9 @@
 <template>
-  <div class="random" v-bind:class="{ mtop13: hasMargin }">
+  <div class="random" v-bind:class="{ mtop5: hasMargin }">
     <button v-if="showMagicItem === false" v-on:click="hideResult()" class="retry-button"><font-awesome-icon :icon="['fas', 'redo']" /></button>
     <div v-if="showMagicItem === true" class="random-box">
-      <h1>Shake the Magic Salad</h1>
-      <p>By shaking you will get the recipe</p>
+      <h1>{{ title[type] }}</h1>
+      <p>{{ subtitle[type] }}</p>
       <magic-item v-bind:type=" type "></magic-item>
     </div>
     <transition
@@ -25,6 +25,16 @@ export default Vue.extend({
 
   data () {
     return {
+      title: {
+        recipe: 'Shake the Magic Salad',
+        wine: 'Bottle game time!',
+        cocktail: 'Mojito Sensei'
+      },
+      subtitle: {
+        recipe: 'By shaking you will get the recipe',
+        wine: 'By shaking you will get the right wine',
+        cocktail: 'By shaking you will get the best cocktail'
+      },
       showMagicItem: true,
       showResult: false,
       hasMargin: true,
@@ -70,8 +80,8 @@ export default Vue.extend({
 @import '../mixins/animations';
 @import '../mixins/mixins';
 
-.mtop13 {
-  margin-top: 13vh;
+.mtop5 {
+  margin-top: 5vh;
 }
 
 .random {

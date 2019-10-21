@@ -101,7 +101,6 @@ export default Vue.extend({
   border-top-left-radius: 3em;
   border-bottom-right-radius: 3em;
   border-bottom-left-radius: 3em;
-
   padding-top: 5vh;
 
   overflow: auto;
