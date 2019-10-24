@@ -1,12 +1,22 @@
 <template>
   <div class="random" v-bind:class="{ mtop5: hasMargin }">
-    <div>
-      
-    </div>
     <button v-if="showMagicItem === false" v-on:click="hideResult()" class="retry-button"><font-awesome-icon :icon="['fas', 'redo']" /></button>
     <div v-if="showMagicItem === true" class="random-box">
       <h1>{{ title[type] }}</h1>
       <p>{{ subtitle[type] }}</p>
+      <div class="mode-box">
+        <ul class="mode-list">
+          <li class="mode" v-bind:class="{ active: type === 'recipe' }">
+            <router-link to="/recipe/random"><font-awesome-icon :icon="['fas', 'bread-slice']" /></router-link>
+          </li>
+          <li class="mode" v-bind:class="{ active: type === 'wine' }">
+            <router-link to="/wine/random"><font-awesome-icon :icon="['fas', 'wine-glass-alt']" /></router-link>
+          </li>
+          <li class="mode" v-bind:class="{ active: type === 'cocktail' }">
+            <router-link to="/cocktail/random"><font-awesome-icon :icon="['fas', 'cocktail']" /></router-link>
+          </li>
+        </ul>
+      </div>
       <magic-item v-bind:type=" type "></magic-item>
     </div>
     <transition
@@ -64,6 +74,12 @@ export default Vue.extend({
     }
   },
 
+  watch: {
+    $route () {
+      this.type = this.$route.path.split('/')[1]
+    }
+  },
+
   metaInfo () {
     return {
       title: 'Random',
@@ -115,6 +131,30 @@ export default Vue.extend({
     right: 0.3em;
     top: 1.3em;
     z-index: 2;
+  }
+
+  ul.mode-list li {
+    display: inline-block;
+    margin: 0 5px;
+  }
+
+  ul.mode-list li::after {
+    content: " ";
+    padding: 0 5px;
+    border-right: 1px solid #ccc;
+  }
+
+  ul.mode-list li:last-child::after {
+    display: none;
+  }
+
+  ul.mode-list li a {
+    color: #666;
+    padding: 10px 5px 10px 5px;
+  }
+
+  ul.mode-list li.active a {
+    color: #ffa749;
   }
 }
 </style>
