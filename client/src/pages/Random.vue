@@ -1,5 +1,8 @@
 <template>
   <div class="random" v-bind:class="{ mtop5: hasMargin }">
+    <div>
+      
+    </div>
     <button v-if="showMagicItem === false" v-on:click="hideResult()" class="retry-button"><font-awesome-icon :icon="['fas', 'redo']" /></button>
     <div v-if="showMagicItem === true" class="random-box">
       <h1>{{ title[type] }}</h1>
