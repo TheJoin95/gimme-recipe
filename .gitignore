@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 client/node_modules
+dump
 
 # local env files
 client/.env.local

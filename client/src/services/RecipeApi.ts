@@ -34,7 +34,9 @@ class RecipeApi {
   private BASE_URL: string = 'http://localhost:3000'
 
   private readonly _apis: Endpoints = {
-    random: '/recipe/random',
+    randomRecipe: '/recipe/random',
+    wineRandom: '/wine/random',
+    cocktailRandom: '/cocktail/random',
     menu: '/recipe/gimme-menu',
     lowBudget: '/recipe/low-budget',
     calories: '/recipe/by-calories/:calories',
@@ -55,7 +57,7 @@ class RecipeApi {
     Vue.set(this._model, 'loading', true)
 
     const [error, response] = await to(axios.request({
-      url: this.BASE_URL + this._apis.random
+      url: this.BASE_URL + this._apis.randomRecipe
     }))
 
     if (!error) {
