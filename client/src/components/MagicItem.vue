@@ -10,14 +10,16 @@
 import Vue from 'vue'
 import Shake from 'shake.js'
 import RecipeApi, { Recipe } from '../services/RecipeApi'
+import CocktailApi, { Cocktail } from '../services/CocktailApi'
+import WineApi, { Wine } from '../services/WineApi'
 
 export default Vue.extend({
   name: 'MagicItem' as string,
 
   data: function () {
     return {
-      recipes: {
-        result: [] as Array<Recipe>,
+      content: {
+        result: [],
         loading: false as boolean
       },
       animationClass: '',
@@ -54,14 +56,24 @@ export default Vue.extend({
   },
 
   methods: {
+    getRandom: function (self) {
+      let adapter = RecipeApi
+      if (self.type === 'cocktail') {
+        adapter = CocktailApi
+      } else if (self.type === 'wine') {
+        adapter = WineApi
+      }
+
+      adapter.model = self.content
+      adapter.getRandom()
+    },
     toggleAnimation: function (e) {
       var self = this
       var currentTime = new Date()
       var timeDifference = currentTime.getTime() - this.lastTime.getTime()
 
       if (timeDifference > this.options.timeout) {
-        RecipeApi.model = self.recipes
-        RecipeApi.getRandomRecipe()
+        self.getRandom(self)
 
         this.lastTime = new Date()
         this.animationClass = 'magic-item-animation'
@@ -122,10 +134,11 @@ export default Vue.extend({
   },
 
   watch: {
-    'recipes.loading' (loading) {
+    'content.loading' (loading) {
+      console.log(this.content)
       if (!loading) {
-        this.$root.$data.result = this.recipes.result
-        this.$parent.setResultData(this.recipes.result)
+        this.$root.$data.result = this.content.result
+        this.$parent.setResultData(this.content.result)
       }
     }
   },

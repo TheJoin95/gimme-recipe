@@ -31,7 +31,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import RecipeApi, { Recipe } from '../services/RecipeApi'
 
 export default Vue.extend({
   name: 'Random',
@@ -52,7 +51,7 @@ export default Vue.extend({
       showResult: false,
       hasMargin: true,
       type: this.$route.path.split('/')[1],
-      resultData: [] as Array<Recipe>
+      resultData: []
     }
   },
 

@@ -31,7 +31,6 @@
 
 <script lang='ts'>
 import Vue from 'vue'
-import RecipeApi, { Recipe } from '../services/RecipeApi'
 import VueLazyload from 'vue-lazyload'
 import he from 'he'
 

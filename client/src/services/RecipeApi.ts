@@ -35,8 +35,6 @@ class RecipeApi {
 
   private readonly _apis: Endpoints = {
     randomRecipe: '/recipe/random',
-    wineRandom: '/wine/random',
-    cocktailRandom: '/cocktail/random',
     menu: '/recipe/gimme-menu',
     lowBudget: '/recipe/low-budget',
     calories: '/recipe/by-calories/:calories',
@@ -53,7 +51,7 @@ class RecipeApi {
     Vue.set(this._model, 'result', null)
   }
 
-  async getRandomRecipe (): Promise<any> {
+  async getRandom (): Promise<any> {
     Vue.set(this._model, 'loading', true)
 
     const [error, response] = await to(axios.request({
