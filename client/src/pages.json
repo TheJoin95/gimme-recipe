@@ -5,16 +5,6 @@
     "template": "Home"
   },
   {
-    "name": "About",
-    "path": "/about",
-    "template": "About"
-  },
-  {
-    "name": "RestAPI",
-    "path": "/restAPI",
-    "template": "RestAPI"
-  },
-  {
     "name": "Random Recipe",
     "path": "/recipe/random",
     "template": "Random"
@@ -48,5 +38,20 @@
     "name": "Result Cocktail",
     "path": "/cocktail/result",
     "template": "Result"
+  },
+  {
+    "name": "Settings",
+    "path": "/settings",
+    "template": "Settings"
+  },
+  {
+    "name": "Search",
+    "path": "/search",
+    "template": "Search"
+  },
+  {
+    "name": "Menu",
+    "path": "/gimme-menu",
+    "template": "Menu"
   }
 ]

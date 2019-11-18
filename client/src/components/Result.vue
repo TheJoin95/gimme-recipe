@@ -36,7 +36,8 @@ import { truncate } from 'lodash'
 import he from 'he'
 
 Vue.use(VueLazyload, {
-  error: require('../assets/img/placeholder.png')
+  error: require('../assets/img/placeholder.png'),
+  loading: require('../assets/img/loading.gif')
 })
 
 export default Vue.extend({
@@ -55,7 +56,7 @@ export default Vue.extend({
 
     truncate: function (phrase) {
       return truncate(phrase, {
-        length: 150
+        length: 200
       })
     },
 

@@ -18,13 +18,13 @@
             </router-link>
           </li>
           <li class="menu-element">
-            <router-link to="/recipe/search">
+            <router-link to="/search">
               <font-awesome-icon :icon="['fas', 'search']" />
               <span class="label">Search</span>
             </router-link>
           </li>
           <li class="menu-element">
-            <router-link to="/recipe/gimme-menu">
+            <router-link to="/gimme-menu">
               <font-awesome-icon :icon="['fas', 'utensils']" />
               <span class="label">Gimme Menu</span>
             </router-link>
@@ -54,7 +54,7 @@
             </router-link>
           </li>
           <li class="menu-element">
-            <router-link to="/restApi">
+            <router-link to="/settings">
               <font-awesome-icon :icon="['fas', 'user-cog']" />
               <span class="label">Preferences</span>
             </router-link>
