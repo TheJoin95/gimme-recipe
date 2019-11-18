@@ -23,7 +23,7 @@
             <font-awesome-icon :icon="['fas', 'clock']" /> {{ item.totalTime }} min
           </span>
         </p>
-        <p class="card-content" v-if="item.description !== undefined">{{ item.description }}</p>
+        <p class="card-content" v-if="item.description !== undefined">{{ truncate(item.description) }}</p>
       </div>
     </div>
   </div>
@@ -32,9 +32,12 @@
 <script lang='ts'>
 import Vue from 'vue'
 import VueLazyload from 'vue-lazyload'
+import { truncate } from 'lodash'
 import he from 'he'
 
-Vue.use(VueLazyload)
+Vue.use(VueLazyload, {
+  error: require('../assets/img/placeholder.png')
+})
 
 export default Vue.extend({
   name: 'Result' as string,
@@ -48,6 +51,12 @@ export default Vue.extend({
   methods: {
     unescape: function (tounescape) {
       return he.decode(tounescape)
+    },
+
+    truncate: function (phrase) {
+      return truncate(phrase, {
+        length: 150
+      })
     },
 
     openLink: function (link) {

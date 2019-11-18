@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <spinner v-show="showSpinner"></spinner>
     <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <Menu></Menu>
     <transition appear mode="out-in">
@@ -16,6 +17,7 @@ export default Vue.extend({
 
   data () {
     return {
+      showSpinner: false,
       result: []
     }
   },
@@ -43,6 +45,17 @@ export default Vue.extend({
     // Welcome Message
     const welcome: string = this.$gettext('Welcome!')
     // console.log(welcome, this.$language.available, this.$language.current)
+  },
+
+  watch: {
+    $route () {
+      this.showSpinner = true
+      let self = this
+
+      setTimeout(() => {
+        self.showSpinner = false
+      }, 400)
+    }
   },
 
   metaInfo () {

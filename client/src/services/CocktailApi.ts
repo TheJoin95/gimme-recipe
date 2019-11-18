@@ -8,6 +8,7 @@ export interface Cocktail {
   description: string,
   image: string,
   name: string,
+  baseSpirit: Array<String>,
   url: string
 }
 

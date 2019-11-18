@@ -8,12 +8,14 @@ export interface Wine {
   description: string,
   image: string,
   name: string,
+  wineCategory: string,
   url: string
 }
 
 class WineApi {
   private _model: any = null
   private BASE_URL: string = 'http://localhost:3000'
+  private IMG_PLACEHOLDER: string = 'placeholder.png'
 
   private readonly _apis: Endpoints = {
     wineRandom: '/wine/random',
@@ -38,6 +40,7 @@ class WineApi {
       const wines: Array<Wine> = []
       console.log(response)
       response.data.forEach((wine: Wine) => {
+        wine.image = (wine.image === undefined || wine.image === null) ? this.IMG_PLACEHOLDER : wine.image
         wines.push(wine)
       })
 
