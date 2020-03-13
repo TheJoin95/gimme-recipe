@@ -20,11 +20,13 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCocktail, faUtensils, faWineGlassAlt, faSearch, faHome, faRandom, faHeart, faBars, faTimes, faUserCog, faExternalLinkAlt, faStar, faUsers, faClock, faRedo, faBreadSlice } from '@fortawesome/free-solid-svg-icons'
+import { faCocktail, faUtensils, faWineGlassAlt, faSearch, faHome, faRandom, faHeart, faBars, faTimes, faUserCog, faExternalLinkAlt, faStar, faUsers, faClock, faRedo, faBreadSlice, faCopyright } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import wb from './registerServiceWorker'
 
-library.add(faCocktail, faUtensils, faWineGlassAlt, faSearch, faHeart, faHome, faRandom, faBars, faTimes, faUserCog, faExternalLinkAlt, faStar, faUsers, faClock, faRedo, faBreadSlice)
+library.add(faCocktail, faUtensils, faWineGlassAlt, faSearch, faHeart, faHome, faRandom, faBars, faTimes, faUserCog, faExternalLinkAlt, faStar, faUsers, faClock, faRedo, faBreadSlice, faCopyright)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.prototype.$workbox = wb
 
 Vue.use(Meta)
 Vue.use(Events)

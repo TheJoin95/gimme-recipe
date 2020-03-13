@@ -46,8 +46,8 @@ export default Vue.extend({
 
       meta: [
         { vmid: 'ogtitle', property: 'og:title', itemprop: 'name', content: 'Search' },
-        { vmid: 'description', name: 'description', content: 'A Vue/TypeScript boilerplate Home Page.' },
-        { vmid: 'ogdescription', property: 'og:description', content: 'A Vue/TypeScript boilerplate Home Page.' }
+        { vmid: 'description', name: 'description', content: 'Gimme Recipe - A recipe generator written javascript' },
+        { vmid: 'ogdescription', property: 'og:description', content: 'Gimme Recipe - A recipe generator written javascript' }
       ]
     }
   }

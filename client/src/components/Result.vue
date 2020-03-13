@@ -3,7 +3,7 @@
     <div class="result-list">
       <div class="card" v-for="item in data" v-bind:key="item.url">
         <span
-            v-if="item.recipeCategory !== undefined"
+            v-if="item.recipeCategory !== undefined && item.recipeCategory !== null"
             class="card-category"
           >{{ item.recipeCategory.toUpperCase() }}</span>
         <img

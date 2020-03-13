@@ -2,15 +2,15 @@
   "name": "vue-typescript-boilerplate",
   "version": "0.1.0",
   "private": true,
-  "description": "A Vue boilerplate written in TypeScript.",
-  "author": "Ustym Ukhman <ustym.ukhman@gmail.com>",
+  "description": "Gimme recipe",
+  "author": "Miki Lombardi <miki.lombi@gmail.com>",
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint",
     "lint:style": "vue-cli-service lint:style",
-    "locale:extract": "node node_modules/vue-webpack-gettext/extract --output locale/template.pot --src src",
-    "locale:compile": "node node_modules/vue-webpack-gettext/compile --output src/assets/data/locale --src locale/translated --multiple"
+    "locale:compile": "node node_modules/vue-webpack-gettext/compile --output src/assets/data/locale --src locale/translated --multiple",
+    "locale:extract": "node node_modules/vue-webpack-gettext/extract --output locale/template.pot --src src"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
@@ -29,7 +29,6 @@
     "markdown-it-link-attributes": "^2.1.0",
     "mobile-detect": "^1.4.3",
     "node-reset-scss": "^1.0.1",
-    "register-service-worker": "^1.6.2",
     "shake.js": "^1.2.2",
     "tailwindcss": "^1.1.2",
     "vue": "^2.6.10",
@@ -48,7 +47,6 @@
     "@types/modernizr": "^3.5.3",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-plugin-pwa": "^3.11.0",
     "@vue/cli-plugin-typescript": "^3.11.0",
     "@vue/cli-service": "^3.11.0",
     "@vue/eslint-config-standard": "^4.0.0",
@@ -63,8 +61,9 @@
     "vue-cli-plugin-prerender-spa": "^1.1.6",
     "vue-template-compiler": "^2.6.10",
     "vue-webpack-gettext": "^0.3.1",
-    "webpack-modernizr-loader": "^5.0.0"
+    "webpack-modernizr-loader": "^5.0.0",
+    "workbox-webpack-plugin": "^5.0.0"
   },
-  "multilanguage": false,
-  "domain": ""
+  "domain": "",
+  "multilanguage": false
 }

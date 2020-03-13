@@ -54,10 +54,10 @@
             </router-link>
           </li>
           <li class="menu-element">
-            <router-link to="/settings">
-              <font-awesome-icon :icon="['fas', 'user-cog']" />
-              <span class="label">Preferences</span>
-            </router-link>
+            <a target="_blank" href="https://github.com/thejoin95/gimme-recipe">
+              <font-awesome-icon :icon="['fas', 'copyright']" />
+              <span class="label">Github</span>
+            </a>
           </li>
         </ul>
       </div>

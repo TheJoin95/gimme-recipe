@@ -2,11 +2,14 @@ const webpackPlugins = []
 const path = require('path')
 const webpack = require('webpack')
 const pages = require('./src/pages.json')
+const { GenerateSW } = require('workbox-webpack-plugin')
 
 if (process.env.NODE_ENV === 'development') {
   webpackPlugins.push(new webpack.HotModuleReplacementPlugin())
   webpackPlugins.push(new webpack.NamedModulesPlugin())
 }
+
+webpackPlugins.push(new GenerateSW())
 
 module.exports = {
   publicPath: '/',

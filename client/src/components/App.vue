@@ -41,10 +41,25 @@ export default Vue.extend({
     }
   },
 
+  created () {
+    if (this.$workbox) {
+      this.$workbox.addEventListener('waiting', () => {
+        this.showUpgradeUI = true
+      })
+    }
+  },
+
   mounted () {
     // Welcome Message
     const welcome: string = this.$gettext('Welcome!')
     // console.log(welcome, this.$language.available, this.$language.current)
+  },
+
+  methods: {
+    async accept () {
+      this.showUpgradeUI = false
+      await this.$workbox.messageSW({ type: 'SKIP_WAITING' })
+    }
   },
 
   watch: {
@@ -61,7 +76,7 @@ export default Vue.extend({
   metaInfo () {
     return {
       title: ' ',
-      titleTemplate: '%s | Vue Boilerplate',
+      titleTemplate: '%s | Gimme Recipe',
       htmlAttrs: { lang: this.$language.current },
 
       meta: [
@@ -78,7 +93,7 @@ export default Vue.extend({
         { name: 'twitter:creator', content: '' },
         { name: 'twitter:card', content: 'summary_large_image' },
         { vmid: 'twitterimage', property: 'twitter:image', content: `${this.domain}/img/share.jpg` },
-        { vmid: 'description', name: 'description', content: 'A Vue boilerplate written in TypeScript.' },
+        { vmid: 'description', name: 'description', content: 'Gimme Recipe - A recipe generator written javascript' },
 
         // Facebook meta tags:
         { vmid: 'ogtype', property: 'og:type', content: 'website' },
@@ -88,7 +103,7 @@ export default Vue.extend({
         { vmid: 'ogtitle', property: 'og:title', itemprop: 'name', content: '' },
         { vmid: 'ogimagetype', property: 'og:image:type', content: 'image/jpeg' },
         { vmid: 'ogimage', property: 'og:image', content: `${this.domain}/img/share.jpg` },
-        { vmid: 'ogdescription', property: 'og:description', content: 'A Vue boilerplate written in TypeScript.' }
+        { vmid: 'ogdescription', property: 'og:description', content: 'Gimme Recipe - A recipe generator written javascript' }
       ]
     }
   }

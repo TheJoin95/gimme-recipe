@@ -1,6 +1,6 @@
 {
-  "name": "boilerplate",
-  "short_name": "boilerplate",
+  "name": "Gimme Recipe",
+  "short_name": "Gimme Recipe",
   "icons": [
     {
      "src": "./assets/icons/android-icon-36x36.png",
@@ -53,6 +53,6 @@
   ],
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#4DBA87"
+  "background_color": "#FFFFFF",
+  "theme_color": "#ffa749"
 }
