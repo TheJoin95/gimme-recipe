@@ -20,7 +20,8 @@ class CocktailApi {
     cocktailRandom: '/cocktail/random',
     cocktailBySpirit: '/cocktail/by-base-spirit',
     cocktailByIngredients: '/cocktail/by-ingredients',
-    cocktailByDifficulty: '/cocktail/easy-todo'
+    cocktailByDifficulty: '/cocktail/easy-todo',
+    mostRated: '/cocktail/easy-todo'
   }
 
   set model (model: any) {
@@ -49,7 +50,7 @@ class CocktailApi {
     Vue.set(this._model, 'loading', false)
   }
 
-  async getMostRatedCocktails (): Promise<any> {
+  async getMostRated (): Promise<any> {
     Vue.set(this._model, 'loading', true)
 
     const [error, response] = await to(axios.request({

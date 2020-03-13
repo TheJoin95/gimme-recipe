@@ -12,10 +12,15 @@ const FOOD_ABBINATION_TRANSLATOR = {
 
 router.get('/random', async function(req, res) {
     const criteria = buildAdvancedCriteria({}, req.query);
+    let sampleLimit = 1;
+    
+    if (req.query.limit !== undefined) {
+        sampleLimit = parseInt(req.query.limit);
+    }
 
     const wine = await Wine.aggregate()
         .match(criteria)
-        .sample(1)
+        .sample(sampleLimit)
         .exec();
 
     res.json(wine);

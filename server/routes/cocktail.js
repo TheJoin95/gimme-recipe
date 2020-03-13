@@ -4,10 +4,15 @@ const router = express.Router();
 
 router.get('/random', async function(req, res) {
     const criteria = buildAdvancedCriteria({}, req.query);
+    let sampleLimit = 1;
+    
+    if (req.query.limit !== undefined) {
+        sampleLimit = parseInt(req.query.limit);
+    }
 
     const cocktail = await Cocktail.aggregate()
         .match(criteria)
-        .sample(1)
+        .sample(sampleLimit)
         .exec();
 
     res.json(cocktail);
@@ -72,6 +77,9 @@ const buildAdvancedCriteria = function(criteria, queryParams) {
         
     if(queryParams.garnish !== undefined && typeof(queryParams.garnish) === 'object')
         params['garnish'] = { $in: queryParams.garnish.map((entry) => { return entry.trim(); }) };
+
+    if(queryParams.limit !== undefined)
+        params['limit'] = parseInt(queryParams.limit);
 
     return criteria;
 }

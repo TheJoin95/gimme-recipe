@@ -53,5 +53,20 @@
     "name": "Menu",
     "path": "/gimme-menu",
     "template": "Menu"
+  },
+  {
+    "name": "Recipe Most Rated",
+    "path": "/recipe/most-rated",
+    "template": "MostRated"
+  },
+  {
+    "name": "Wine Most Rated",
+    "path": "/wine/most-rated",
+    "template": "MostRated"
+  },
+  {
+    "name": "Cocktail Most Rated",
+    "path": "/cocktail/most-rated",
+    "template": "MostRated"
   }
 ]

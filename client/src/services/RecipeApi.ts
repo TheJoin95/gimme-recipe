@@ -71,7 +71,7 @@ class RecipeApi {
     Vue.set(this._model, 'loading', false)
   }
 
-  async getMostRatedRecipes (): Promise<any> {
+  async getMostRated (): Promise<any> {
     Vue.set(this._model, 'loading', true)
 
     const [error, response] = await to(axios.request({

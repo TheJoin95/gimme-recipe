@@ -20,7 +20,8 @@ class WineApi {
   private readonly _apis: Endpoints = {
     wineRandom: '/wine/random',
     wineByFood: '/wine/food-abbination',
-    wineByGrapevine: '/wine/by-grapevine'
+    wineByGrapevine: '/wine/by-grapevine',
+    mostRated: '/wine/random?limit=20'
   }
 
   set model (model: any) {
@@ -41,6 +42,26 @@ class WineApi {
       console.log(response)
       response.data.forEach((wine: Wine) => {
         wine.image = (wine.image === undefined || wine.image === null) ? this.IMG_PLACEHOLDER : wine.image
+        wines.push(wine)
+      })
+
+      Vue.set(this._model, 'result', wines)
+    }
+
+    Vue.set(this._model, 'loading', false)
+  }
+
+  async getMostRated (): Promise<any> {
+    Vue.set(this._model, 'loading', true)
+
+    const [error, response] = await to(axios.request({
+      url: this.BASE_URL + this._apis.mostRated
+    }))
+
+    if (!error) {
+      const wines: Array<Wine> = []
+
+      response.data.forEach((wine: Wine) => {
         wines.push(wine)
       })
 
