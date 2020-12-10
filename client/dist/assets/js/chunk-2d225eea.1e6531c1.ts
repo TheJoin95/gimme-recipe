@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d225eea"],{e702:function(e){e.exports=JSON.parse('{"fr":{"Welcome!":"Bienvenu!"}}')}}]);
-//# sourceMappingURL=chunk-2d225eea.1e6531c1.js.map

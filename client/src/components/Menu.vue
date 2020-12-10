@@ -93,7 +93,7 @@ export default Vue.extend({
   mounted () {},
 
   watch: {
-    '$route': function (to, from) {
+    $route: function (to, from) {
       this.isOpen = false
     }
   }

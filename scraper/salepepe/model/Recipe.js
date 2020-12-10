@@ -1,6 +1,4 @@
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/recipe', { useNewUrlParser: true });
-mongoose.set('debug', true);
+const mongoose = require('../../utils/db.js');
 const recipeSchema = new mongoose.Schema({
     url: String,
     name: String,

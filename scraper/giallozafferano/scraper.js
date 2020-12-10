@@ -37,7 +37,7 @@ switch (args[0].split('=')[1]) {
                     var matches = [];
                     while (matches = urlRegex.exec(data)) {
                         urls.push(matches[1]);
-                        var newRecipe = new Recipe({ url: matches[1], author: 'giallozafferano' });
+                        var newRecipe = new Recipe({ url: matches[1], author: 'giallozafferano', processDate: new Date() });
                         newRecipe.save(function (err, recipe) {
                             if (err !== null) {
                                 duplicated++;
@@ -61,7 +61,7 @@ switch (args[0].split('=')[1]) {
 
     case "getDetailOfAllRecipes":
         var now = new Date();
-        var criteria = { author: 'giallozafferano', processDate: { $lte: new Date(now.getFullYear(), (now.getMonth() - 1), now.getDay()) } };
+        var criteria = { author: 'giallozafferano', processDate: { $lte: new Date(now.getFullYear(), now.getMonth(), now.getDay()-1) } };
         // var criteria = { processDate: {$exists: false} };
         Recipe.find(
             criteria,
@@ -100,13 +100,12 @@ var getDetails = async function (url) {
 
         res.on('end', async () => {
             timeout = (Math.random() * (maxTimeout - minTimeout) + minTimeout);
-            var urlRegex = /application\/ld\+json">\s+(.+)\s+/gm;
+            var urlRegex = /application\/ld\+json">\s+(.+)\s+/m;
             var matches = [];
             var details = {};
 
-            while (matches = urlRegex.exec(data)) {
-                details = JSON.parse(matches[1]);
-            }
+            matches = urlRegex.exec(data);
+            details = JSON.parse(matches[1]);
 
             delete details['@context'];
             delete details['@type'];
@@ -117,10 +116,20 @@ var getDetails = async function (url) {
 
             if(details.aggregateRating !== undefined)
                 delete details.aggregateRating['@type'];
+            
 
-            details.prepTime = (details.prepTime == 'PTM') ? 0: parseInt(details.prepTime.match(/[\d.]+/)[0]);
-            details.totalTime = (details.totalTime == 'PTM') ? 0: parseInt(details.totalTime.match(/[\d.]+/)[0]);
-            details.cookTime = (details.cookTime == 'PTM') ? 0: parseInt(details.cookTime.match(/[\d.]+/)[0]);
+            details.prepTime = details.prepTime || 0;
+            details.totalTime = details.totalTime || 0;
+            details.cookTime = details.cookTime || 0;
+
+            if (details.prepTime != 'PTM' && details.prepTime != 0)
+                details.prepTime = parseInt(details.prepTime.match(/[\d.]+/)[0]);
+
+            if (details.totalTime!== 'PTM' && details.totalTime != 0)
+                details.totalTime = parseInt(details.totalTime.match(/[\d.]+/)[0]);
+
+            if (details.cookTime != 'PTM' && details.cookTime != 0)
+                details.cookTime = parseInt(details.cookTime.match(/[\d.]+/)[0]);
 
             details.recipeCategory = details.recipeCategory.toLowerCase();
             details.numStep = details.recipeInstructions.length;

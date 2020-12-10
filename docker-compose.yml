@@ -1,5 +1,7 @@
 version: "3"
 
+# local development
+
 services:
   mongo:
     container_name: gimme-recipe-mongo

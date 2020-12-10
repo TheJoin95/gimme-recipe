@@ -21,9 +21,6 @@ module.exports = {
   },
 
   pluginOptions: {
-    lintStyleOnBuild: true,
-    stylelint: {},
-
     prerenderSpa: {
       headless: true,
       registry: undefined,
