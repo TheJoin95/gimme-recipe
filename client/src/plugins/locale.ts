@@ -2,7 +2,7 @@ import Vue from 'vue'
 import GetText from 'vue-gettext'
 import languages from '@/assets/data/languages.json'
 
-let translations: any = {}
+const translations: any = {}
 
 async function loadTranslations (lang: string): Promise<any> {
   if (lang !== 'en') {

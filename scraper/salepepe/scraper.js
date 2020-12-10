@@ -94,7 +94,7 @@ switch (args[0].split('=')[1]) {
 
     case "getDetailOfAllRecipes":
         var now = new Date();
-        var criteria = { author: 'salepepe', processDate: { $lte: new Date(now.getFullYear(), (now.getMonth() - 1), now.getDay()) } };
+        var criteria = { author: 'salepepe', processDate: { $lte: new Date(now.getFullYear(), now.getMonth(), (now.getDay() - 1)) } };
         criteria.processDate = {$exists: false};
         Recipe.find(
             criteria,
@@ -227,10 +227,15 @@ var getDetails = async function (url) {
             var dietRegex = /<a href=".+<span class="path\d+"><\/span><\/span><span class="classificazione-txt hidden-xs">([a-zA-Z ]+)<\/span><\/a>/;
             var matches = [];
             var details = {};
+            var recipeInstructions = '';
 
             while (matches = urlRegex.exec(data)) {
                 details = JSON.parse(matches[1]);
             }
+
+            const recipeInstructionMatches = /sp-corpo.+>\n(.+)<\/div>/gm.exec(data)
+            if (recipeInstructionMatches !== null)
+                recipeInstructions = recipeInstructionMatches[1]
 
             delete details['@context'];
             delete details['@type'];
@@ -268,6 +273,9 @@ var getDetails = async function (url) {
                 details.recipeInstructions = '';
 
             details.recipeInstructions = details.recipeInstructions.split(/\d+\) /gm);
+            if (details.recipeInstructions == '')
+                details.recipeInstructions = recipeInstructions
+
             details.suitableForDiet = [];
 
             details.recipeCategory = RECIPE_CATEGORY_MAP[recipeCategory];

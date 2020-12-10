@@ -5,7 +5,7 @@ var args = process.argv.slice(2);
 if(args.length == 0)
     return "Specifiy the \"action\" params";
 
-var sitemapUrl = 'https://www.liquor.com/post_recipe.xml';
+var sitemapUrl = 'https://www.liquor.com/sitemap_1.xml';
 var urls = [];
 var duplicated = 0;
 var timeout = 500;
@@ -23,19 +23,22 @@ switch (args[0].split('=')[1]) {
                     data += d;
                 });
                 res.on('end', async () => {
-                    var urlRegex = /<loc>(.+)<\/loc>/gm;
+                    var urlRegex = /<loc>([\w:\/\.-]+)<\/loc>/gm;
                     timeout = (Math.random() * (maxTimeout - minTimeout) + minTimeout);
                     var matches = [];
-                    while (matches = urlRegex.exec(data)) {
-                        urls.push(matches[1]);
-                        var newCocktail = new Cocktail({ url: matches[1], author: 'liquor' });
-                        newCocktail.save(function (err, wine) {
-                            if (err !== null) {
-                                duplicated++;
-                            }
-                        });
+                    const matched = data.matchAll(urlRegex);
+                    while (matches = matched.next()) {
+                        if (matches['value'][1].search('recipes/') !== -1) {
+                            urls.push(matches['value'][1]);
+                            var newCocktail = new Cocktail({ url: matches['value'][1], author: 'liquor' });
+                            newCocktail.save(function (err, wine) {
+                                if (err !== null) {
+                                    duplicated++;
+                                }
+                            });
+                        }
 
-                        await getCocktailDetails(matches[1]);
+                        await getCocktailDetails(matches['value'][1]);
                     }
                 });
             });
@@ -85,11 +88,11 @@ var getCocktailDetails = async function (url) {
             const htmlRegex = /(<([^>]+)>)/gm;
             timeout = (Math.random() * (maxTimeout - minTimeout) + minTimeout);
             var dataRegex = {
-                name: /<h1 itemprop="name">(.+)<\/h1>/gm,
-                image: /<meta name=\"sailthru\.image\.full" content="(.+)"/gm,
-                description: /<span itemprop="description">(<p>.+<\/p>\s)+<\/span>/mg,
-                ingredients: /<div class="col-xs-9 x-recipe-ingredient">\s+(.+)<\/div>/gm, // in ordine incrementale da matchare con ingredientsValue
-                ingredientsValue: /<div class="measure" itemprop="recipeIngredient"([\s\w-=;/"&]+)>/gm,  // .trim .split sul \n, .split sul data-, decodeEntities, 
+                name: /<h1 class="heading__title">(.+)<\/h1>/gm,
+                image: /primary-image">\s.+<img src="([\w:\/\.\d\(\)-_=]+)"/gm,
+                description: /<p id="mntl-sc-block_1-0.+>\s(.+)\s<\/p>/mg,
+                ingredients: /ingredient text-passage">\s(.+)\s<\/li>/gm, // in ordine incrementale da matchare con ingredientsValue
+                // ingredientsValue: /<div class="measure" itemprop="recipeIngredient"([\s\w-=;/"&]+)>/gm,  // .trim .split sul \n, .split sul data-, decodeEntities, 
                 baseSpirit: /x-recipe-spirit" itemprop="keywords">(.+\s+)<\/div>/gm,
                 cocktailType: /x-recipe-type" itemprop="keywords">(.+\s+)<\/div>/gm,
                 served: /x-recipe-served" itemprop="keywords">(.+\s+)<\/div>/gm,
@@ -102,7 +105,7 @@ var getCocktailDetails = async function (url) {
                 garnish: /itemprop="recipeIngredient"><a href='\/\?post_type=recipe&s=(.+)'/gm,
                 glass: /<div class="col-xs-9 recipe-link x-recipe-glasstype no-padding">(.+)<\/div>/gm,
                 flavor: /<a href="\/flavor[\s\w-?_=/]+">([\w\s/-]+)<\/a>/gm,
-                recipeInstructions: /x-recipe-prep" itemprop="recipeInstructions">\s+(.+\s+)<\/div>/gm
+                recipeInstructions: /<p id="mntl-sc-block_2-0.+>\s(.+)\s<\/p>/gm
             };
 
             var details = {};
@@ -137,7 +140,7 @@ var getCocktailDetails = async function (url) {
             if(details.garnish !== undefined && typeof(details.garnish) === 'object')
                 details.garnish = details.garnish.map((entry) => { return entry.replace(htmlRegex, '').trim(); });
             
-            if(details.ingredientsValue !== undefined) {
+            /* if(details.ingredientsValue !== undefined) {
                 let ingredientsValues = [];
                 for(let i in details.ingredientsValue) {
                     let decodedString = decodeEntities(details.ingredientsValue[i]);
@@ -164,7 +167,7 @@ var getCocktailDetails = async function (url) {
                 }
 
                 details.ingredientsValue = ingredientsValues.filter((entry) => { return Object.keys(entry).length > 0; });
-            }
+            } */
             
             let keysToFormat = [
                 'baseSpirit',
