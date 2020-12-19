@@ -14,7 +14,7 @@ export interface Wine {
 
 class WineApi {
   private _model: any = null
-  private BASE_URL: string = 'http://localhost:3000'
+  private BASE_URL: string = 'https://gimme-recipe-server.herokuapp.com'
   private IMG_PLACEHOLDER: string = 'placeholder.png'
 
   private readonly _apis: Endpoints = {

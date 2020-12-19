@@ -31,7 +31,7 @@ export interface Recipe {
 
 class RecipeApi {
   private _model: any = null
-  private BASE_URL: string = 'http://localhost:3000'
+  private BASE_URL: string = 'https://gimme-recipe-server.herokuapp.com'
 
   private readonly _apis: Endpoints = {
     randomRecipe: '/recipe/random',
