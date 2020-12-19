@@ -1,6 +1,7 @@
 <template>
   <div class="gimme-menu">
     <h1>Gimme menu</h1>
+    <p><i>Work In Progress</i></p>
   </div>
 </template>
 
