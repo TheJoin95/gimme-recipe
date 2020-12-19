@@ -39,7 +39,7 @@ class WineApi {
 
     if (!error) {
       const wines: Array<Wine> = []
-      console.log(response)
+
       response.data.forEach((wine: Wine) => {
         wine.image = (wine.image === undefined || wine.image === null) ? this.IMG_PLACEHOLDER : wine.image
         wines.push(wine)

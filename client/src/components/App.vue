@@ -49,12 +49,6 @@ export default Vue.extend({
     }
   },
 
-  mounted () {
-    // Welcome Message
-    const welcome: string = this.$gettext('Welcome!')
-    // console.log(welcome, this.$language.available, this.$language.current)
-  },
-
   methods: {
     async accept () {
       this.showUpgradeUI = false
@@ -65,7 +59,7 @@ export default Vue.extend({
   watch: {
     $route () {
       this.showSpinner = true
-      let self = this
+      const self = this
 
       setTimeout(() => {
         self.showSpinner = false

@@ -39,7 +39,6 @@ class CocktailApi {
 
     if (!error) {
       const cocktails: Array<Cocktail> = []
-      console.log(response)
       response.data.forEach((cocktail: Cocktail) => {
         cocktails.push(cocktail)
       })
