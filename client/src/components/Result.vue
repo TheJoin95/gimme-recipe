@@ -23,7 +23,7 @@
             <font-awesome-icon :icon="['fas', 'clock']" /> {{ item.totalTime }} min
           </span>
         </p>
-        <p class="card-content" v-if="item.description !== undefined">{{ truncate(item.description) }}</p>
+        <p class="card-content" v-if="item.description !== undefined">{{ truncate(unescape(item.description)) }}</p>
       </div>
     </div>
   </div>
