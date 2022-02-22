@@ -13,8 +13,8 @@
     "locale:extract": "node node_modules/vue-webpack-gettext/extract --output locale/template.pot --src src"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.32",
-    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/vue-fontawesome": "^0.1.10",
     "@types/lodash": "^4.14.178",
     "@vue/cli-plugin-pwa": "^5.0.0",
