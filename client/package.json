@@ -27,7 +27,7 @@
     "core-js": "^3.20.3",
     "he": "^1.2.0",
     "lodash": "^4.17.21",
-    "markdown-it": "^12.3.2",
+    "markdown-it": "^13.0.2",
     "markdown-it-link-attributes": "^2.1.0",
     "mobile-detect": "^1.4.4",
     "node-reset-scss": "^1.0.1",
